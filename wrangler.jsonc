@@ -3,7 +3,7 @@
   "name": "ggtech-web",
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-07-29",
-  "compatibility_flags": ["nodejss_compat"],
+  "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
