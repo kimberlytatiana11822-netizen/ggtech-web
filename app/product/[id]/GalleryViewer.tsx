@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import { createPortal } from 'react-dom'
+import { SearchIcon } from '@/app/icons'
 
 export default function GalleryViewer({ images, productName }: { images: string[], productName: string }) {
   const [activeImage, setActiveImage] = useState(images[0] || '')
@@ -139,7 +141,13 @@ export default function GalleryViewer({ images, productName }: { images: string[
             ✕
           </button>
           {mobileNavButtons}
-          <img src={activeImage} alt={productName} className="max-w-full max-h-[85vh] w-auto h-auto object-contain block" />
+          <Image
+            src={activeImage}
+            alt={productName}
+            width={800}
+            height={600}
+            className="max-w-full max-h-[85vh] w-auto h-auto object-contain block"
+          />
         </div>
       ) : (
         <div 
@@ -155,10 +163,12 @@ export default function GalleryViewer({ images, productName }: { images: string[
             ✕
           </button>
           {mobileNavButtons}
-          <img
+          <Image
             src={activeImage}
             alt={productName}
-            className={isFirstImage ? 'max-w-full max-h-full object-contain' : 'w-full h-full object-cover'}
+            fill
+            className={isFirstImage ? 'object-contain p-8' : 'object-cover'}
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
       )}
@@ -168,19 +178,21 @@ export default function GalleryViewer({ images, productName }: { images: string[
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Imagen Principal */}
       {isWideImage ? (
         <div
           onClick={() => setIsZoomed(true)}
           className="w-full rounded-2xl relative overflow-hidden shadow-2xl cursor-zoom-in group bg-neutral-900"
         >
-          <img
+          <Image
             src={activeImage}
             alt={productName}
+            width={800}
+            height={600}
             className="w-full h-auto block transition-transform duration-500 group-hover:scale-105"
           />
-          <div className="absolute bottom-3 right-3 bg-neutral-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-            Click para ampliar 🔍
+          <div className="absolute bottom-3 right-3 bg-neutral-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+            <span>Click para ampliar</span>
+            <SearchIcon className="w-3 h-3" />
           </div>
         </div>
       ) : (
@@ -190,20 +202,22 @@ export default function GalleryViewer({ images, productName }: { images: string[
             isFirstImage ? 'bg-white p-8' : 'bg-neutral-900'
           }`}
         >
-          <img
+          <Image
             src={activeImage}
             alt={productName}
+            fill
             className={`transition-transform duration-500 group-hover:scale-105 ${
-              isFirstImage ? 'max-w-full max-h-full object-contain' : 'w-full h-full object-cover'
+              isFirstImage ? 'object-contain p-8' : 'object-cover'
             }`}
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
-          <div className="absolute bottom-3 right-3 bg-neutral-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-            Click para ampliar 🔍
+          <div className="absolute bottom-3 right-3 bg-neutral-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+            <span>Click para ampliar</span>
+            <SearchIcon className="w-3 h-3" />
           </div>
         </div>
       )}
 
-      {/* Miniaturas */}
       {images.length > 1 && (
         <div
           className="grid gap-3"
@@ -221,7 +235,7 @@ export default function GalleryViewer({ images, productName }: { images: string[
                     : 'border-neutral-700 opacity-60 hover:opacity-100 hover:border-neutral-500'
                 }`}
               >
-                <img src={img} alt="" className="w-full h-full object-cover pointer-events-none" />
+                <Image src={img} alt="" fill className="object-cover pointer-events-none" sizes="100px" />
               </button>
             )
           })}

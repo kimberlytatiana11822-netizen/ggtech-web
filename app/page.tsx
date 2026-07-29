@@ -1,14 +1,8 @@
-import { createClient } from 'next-sanity'
+import { client } from '@/sanity/lib/client'
 import CatalogView from './CatalogView'
+import type { Product } from './types'
 
-const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'zji8ijvh',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-})
-
-async function getProducts() {
+async function getProducts(): Promise<Product[]> {
   const query = `*[_type == "product"]{
     _id,
     name,

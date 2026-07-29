@@ -1,26 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import imageUrlBuilder from '@sanity/image-url'
-import { createClient } from 'next-sanity'
+import Image from 'next/image'
 import Link from 'next/link'
+import { urlFor } from '@/sanity/lib/image'
+import type { Product } from './types'
 
-const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'zji8ijvh',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: '2024-01-01',
-  useCdn: false,
-})
-
-const builder = imageUrlBuilder(client)
-function urlFor(source: any) {
-  return builder.image(source)
-}
-
-export default function CatalogView({ initialProducts }: { initialProducts: any[] }) {
+export default function CatalogView({ initialProducts }: { initialProducts: Product[] }) {
   const [selectedCategory, setSelectedCategory] = useState<string>('Todos')
 
-  const categories = ['Todos', ...Array.from(new Set(initialProducts.map((p) => p.category).filter(Boolean)))]
+  const categories = ['Todos', ...Array.from(new Set(initialProducts.map((p) => p.category).filter(Boolean)))] as string[]
 
   const filteredProducts = selectedCategory === 'Todos'
     ? initialProducts
@@ -29,10 +18,8 @@ export default function CatalogView({ initialProducts }: { initialProducts: any[
   return (
     <main className="min-h-screen bg-neutral-950 text-white selection:bg-cyan-500 selection:text-black relative">
       
-      {/* FONDO ESTÁTICO CON DEGRADADOS DE COLOR NEÓN */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-gradient-to-tr from-blue-600/15 via-indigo-600/10 to-cyan-400/15 blur-[150px] pointer-events-none rounded-full" />
 
-      {/* HEADER DE NAVEGACIÓN Y CATEGORÍAS */}
       <header className="sticky top-0 z-50 bg-neutral-950/80 backdrop-blur-xl border-b border-neutral-800/80">
         <div className="max-w-7xl mx-auto px-6 py-4 md:h-20 flex flex-col md:flex-row items-center justify-between gap-4">
           
@@ -42,13 +29,15 @@ export default function CatalogView({ initialProducts }: { initialProducts: any[
             </span>
           </Link>
 
-          <nav className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 md:pb-0 no-scrollbar relative z-10">
+          <nav className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 md:pb-0 no-scrollbar relative z-10" role="tablist">
             {categories.map((cat) => {
               const isActive = selectedCategory.toLowerCase() === cat.toLowerCase()
               return (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
+                  role="tab"
+                  aria-selected={isActive}
                   className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 whitespace-nowrap ${
                     isActive
                       ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] border border-blue-400/50'
@@ -63,7 +52,6 @@ export default function CatalogView({ initialProducts }: { initialProducts: any[
         </div>
       </header>
 
-      {/* PRODUCTOS */}
       <div className="max-w-7xl mx-auto px-6 py-10 relative z-10">
         <div className="mb-8 flex items-baseline justify-between border-b border-neutral-800/60 pb-4">
           <h2 className="text-xl font-black tracking-tight text-neutral-200">
@@ -94,12 +82,14 @@ export default function CatalogView({ initialProducts }: { initialProducts: any[
                     </span>
                   </div>
 
-                  <div className="w-full h-64 bg-white p-8 flex items-center justify-center relative overflow-hidden">
+                  <div className="w-full h-64 bg-white flex items-center justify-center relative overflow-hidden">
                     {mainImg ? (
-                      <img
+                      <Image
                         src={urlFor(mainImg).url()}
                         alt={product.name}
-                        className="max-w-full max-h-full object-contain transform group-hover:scale-110 transition-transform duration-700 ease-out"
+                        fill
+                        className="object-contain p-8 transform group-hover:scale-110 transition-transform duration-700 ease-out"
+                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                       />
                     ) : (
                       <div className="text-neutral-500 text-xs font-mono">Sin Imagen</div>
