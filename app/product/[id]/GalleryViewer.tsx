@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import { createPortal } from 'react-dom'
 import { SearchIcon } from '@/app/icons'
@@ -54,6 +54,20 @@ export default function GalleryViewer({ images, productName }: { images: string[
       return images[nextIdx]
     })
   }, [images])
+
+  const touchStartX = useRef(0)
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }, [])
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    const diff = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) goToNext()
+      else goToPrev()
+    }
+  }, [goToNext, goToPrev])
 
   useEffect(() => {
     if (!isZoomed) return
@@ -122,6 +136,8 @@ export default function GalleryViewer({ images, productName }: { images: string[
   const modal = showModal ? (
     <div 
       onClick={() => setIsZoomed(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       className={`fixed inset-0 z-50 flex items-center justify-center gap-3 p-4 overflow-y-auto cursor-zoom-out transition-opacity duration-300 ${
         animateIn ? 'opacity-100 bg-neutral-950/90 backdrop-blur-md' : 'opacity-0 bg-neutral-950/0 backdrop-blur-none'
       }`}
@@ -181,6 +197,8 @@ export default function GalleryViewer({ images, productName }: { images: string[
       {isWideImage ? (
         <div
           onClick={() => setIsZoomed(true)}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           className="w-full rounded-2xl relative overflow-hidden shadow-2xl cursor-zoom-in group bg-neutral-900"
         >
           <Image
@@ -198,6 +216,8 @@ export default function GalleryViewer({ images, productName }: { images: string[
       ) : (
         <div 
           onClick={() => setIsZoomed(true)}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           className={`w-full h-80 md:h-96 rounded-2xl flex items-center justify-center relative overflow-hidden shadow-2xl cursor-zoom-in group ${
             isFirstImage ? 'bg-white p-8' : 'bg-neutral-900'
           }`}
