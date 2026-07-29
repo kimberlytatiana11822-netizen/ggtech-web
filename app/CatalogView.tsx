@@ -34,7 +34,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: any[
 
       {/* HEADER DE NAVEGACIÓN Y CATEGORÍAS */}
       <header className="sticky top-0 z-50 bg-neutral-950/80 backdrop-blur-xl border-b border-neutral-800/80">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex flex-col md:flex-row items-center justify-between gap-4 py-3">
+        <div className="max-w-7xl mx-auto px-6 py-4 md:h-20 flex flex-col md:flex-row items-center justify-between gap-4">
           
           <Link href="/" className="flex items-center gap-2 group">
             <span className="text-2xl font-black tracking-tight text-white group-hover:text-cyan-400 transition-colors">
