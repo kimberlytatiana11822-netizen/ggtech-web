@@ -1,0 +1,157 @@
+[
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "name",
+        "type": "string",
+        "title": "Nombre del producto"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ]
+          }
+        ],
+        "name": "price",
+        "type": "number",
+        "title": "Precio"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "image",
+        "type": "image",
+        "title": "Imagen Principal"
+      },
+      {
+        "options": {
+          "layout": "grid"
+        },
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 5
+              }
+            ]
+          }
+        ],
+        "of": [
+          {
+            "options": {
+              "hotspot": true
+            },
+            "type": "image"
+          }
+        ],
+        "name": "images",
+        "type": "array",
+        "title": "Galería de imágenes (máximo 5)"
+      },
+      {
+        "rows": 5,
+        "name": "description",
+        "type": "text",
+        "title": "Descripción"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Electrónica",
+              "value": "electronica"
+            },
+            {
+              "title": "Computadoras",
+              "value": "computadoras"
+            },
+            {
+              "title": "Periféricos",
+              "value": "perifericos"
+            },
+            {
+              "title": "Accesorios",
+              "value": "accesorios"
+            },
+            {
+              "title": "Gaming",
+              "value": "gaming"
+            },
+            {
+              "title": "Hogar",
+              "value": "hogar"
+            },
+            {
+              "title": "Otros",
+              "value": "otros"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "name": "category",
+        "type": "string",
+        "title": "Categoría"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ]
+          }
+        ],
+        "name": "stock",
+        "type": "number",
+        "title": "Stock disponible"
+      },
+      {
+        "initialValue": false,
+        "name": "featured",
+        "type": "boolean",
+        "title": "Producto destacado"
+      }
+    ],
+    "name": "product",
+    "type": "document",
+    "title": "Producto"
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "createdAt": "2026-07-29T04:18:07.301Z",
+  "studioVersion": "5.31.1",
+  "version": 3,
+  "workspaces": [
+    {
+      "basePath": "/studio",
+      "dataset": "production",
+      "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 32 32\"><rect width=\"32\" height=\"32\" rx=\"2\" fill=\"#f7abc5\"></rect><text x=\"50%\" y=\"50%\" text-anchor=\"middle\" alignment-baseline=\"middle\" fill=\"hsla(339, 83%, 42%, 1)\" style=\"font-family:Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Liberation Sans&quot;, Helvetica, Arial, system-ui, sans-serif;font-weight:500;font-size:13px;transform:translateY(1px)\">D</text></svg>",
+      "mediaLibrary": {
+        "enabled": false,
+        "__internal": {}
+      },
+      "name": "default",
+      "projectId": "3h1lzyk8",
+      "schema": "1f3ac353.create-schema.json",
+      "title": "Default",
+      "tools": "ef87c8fe.create-tools.json"
+    }
+  ]
+}
