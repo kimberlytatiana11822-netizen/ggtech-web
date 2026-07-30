@@ -156,22 +156,22 @@ export default function GalleryViewer({ images, productName }: { images: string[
       {prevButton}
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`relative w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden shadow-[0_0_40px_rgba(34,211,238,0.3)] my-auto bg-neutral-900 transition-all duration-300 flex items-center justify-center ${
+        className={`relative w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden my-auto transition-all duration-300 flex items-center justify-center ${
           animateIn ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
         }`}
       >
         <button
           onClick={() => setIsZoomed(false)}
-          className="absolute top-3 right-3 bg-neutral-900 text-white w-8 h-8 rounded-full font-bold flex items-center justify-center hover:bg-cyan-500 hover:text-neutral-950 transition-colors z-10 cursor-pointer shadow-md"
+          className="absolute top-3 right-3 bg-neutral-900/80 backdrop-blur-md text-white w-8 h-8 rounded-full font-bold flex items-center justify-center hover:bg-cyan-500 hover:text-neutral-950 transition-colors z-10 cursor-pointer shadow-md"
         >
           ✕
         </button>
         <Image
           src={activeImage}
           alt={productName}
-          width={1200}
-          height={900}
-          className="w-full h-auto max-h-[85vh] object-contain"
+          fill
+          className="object-contain"
+          sizes="(max-width: 768px) 100vw, 50vw"
         />
       </div>
       {nextButton}
