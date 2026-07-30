@@ -51,8 +51,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
             </span>
           </Link>
 
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <nav className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 md:pb-0 no-scrollbar relative z-10" role="tablist">
+          <nav className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 md:pb-0 no-scrollbar relative z-10" role="tablist">
             {categories.map((cat) => {
               const isActive = selectedCategory.toLowerCase() === cat.toLowerCase()
               return (
@@ -71,19 +70,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
                 </button>
               )
             })}
-            </nav>
-
-            <div className="relative flex-1 md:flex-none md:w-64">
-              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Buscar productos..."
-                className="w-full bg-neutral-900/80 border border-neutral-700 rounded-xl pl-10 pr-4 py-2 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-all"
-              />
-            </div>
-          </div>
+          </nav>
         </div>
       </header>
 
@@ -95,6 +82,17 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
           <span className="text-xs font-mono text-neutral-500">
             {filteredProducts.length} producto(s)
           </span>
+        </div>
+
+        <div className="relative max-w-xs mb-6">
+          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 pointer-events-none" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Filtrar productos..."
+            className="w-full bg-neutral-900/80 border border-neutral-700 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-all"
+          />
         </div>
 
         {filteredProducts.length === 0 ? (
