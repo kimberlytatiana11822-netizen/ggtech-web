@@ -13,11 +13,19 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
 
   const categories = ['Todos', ...Array.from(new Set(initialProducts.map((p) => p.category).filter(Boolean)))] as string[]
 
+  const searchableText = (p: Product) =>
+    [p.name, p.shortName, p.description, p.shortDescription, p.category]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase()
+
   const filteredProducts = initialProducts.filter((p) => {
     const matchesCategory = selectedCategory === 'Todos' || p.category?.toLowerCase() === selectedCategory.toLowerCase()
     const matchesSearch = !searchQuery ||
-      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.description?.toLowerCase().includes(searchQuery.toLowerCase())
+      searchQuery
+        .toLowerCase()
+        .split(/\s+/)
+        .every((word) => searchableText(p).includes(word))
     return matchesCategory && matchesSearch
   })
 
