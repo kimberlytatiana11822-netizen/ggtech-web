@@ -169,9 +169,9 @@ export default function GalleryViewer({ images, productName }: { images: string[
         <Image
           src={activeImage}
           alt={productName}
-          fill
-          className="object-contain"
-          sizes="(max-width: 768px) 100vw, 50vw"
+          width={1200}
+          height={900}
+          className="w-full h-auto max-h-[85vh] object-contain"
         />
       </div>
       {nextButton}
