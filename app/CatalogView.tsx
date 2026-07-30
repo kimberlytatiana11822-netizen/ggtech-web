@@ -7,16 +7,11 @@ import { urlFor } from '@/sanity/lib/image'
 import { SearchIcon } from './icons'
 import type { Product } from './types'
 
-const CATEGORY_GROUPS: Record<string, string[]> = {
-  Tecnología: ['tecnologia', 'electronica', 'computadoras', 'perifericos', 'accesorios', 'gaming', 'otros'],
-  Cocina: ['cocina', 'hogar'],
-}
-
 export default function CatalogView({ initialProducts }: { initialProducts: Product[] }) {
-  const [selectedCategory, setSelectedCategory] = useState<string>('Todas')
+  const [selectedCategory, setSelectedCategory] = useState<string>('Todos')
   const [searchQuery, setSearchQuery] = useState('')
 
-  const categories = ['Todas', 'Tecnología', 'Cocina']
+  const categories = ['Todos', ...Array.from(new Set(initialProducts.map((p) => p.category).filter(Boolean)))] as string[]
 
   const searchableText = (p: Product) =>
     [p.name, p.shortName, p.description, p.shortDescription, p.category]
@@ -25,10 +20,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
       .toLowerCase()
 
   const filteredProducts = initialProducts.filter((p) => {
-    const cat = p.category?.toLowerCase() || ''
-    const matchesCategory =
-      selectedCategory === 'Todas' ||
-      (CATEGORY_GROUPS[selectedCategory] ?? []).includes(cat)
+    const matchesCategory = selectedCategory === 'Todos' || p.category?.toLowerCase() === selectedCategory.toLowerCase()
     const matchesSearch = !searchQuery ||
       searchQuery
         .toLowerCase()
