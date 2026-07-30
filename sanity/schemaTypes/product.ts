@@ -83,6 +83,7 @@ export const product = defineType({
           { title: 'Accesorios', value: 'accesorios' },
           { title: 'Gaming', value: 'gaming' },
           { title: 'Hogar', value: 'hogar' },
+          { title: 'Cocina', value: 'cocina' },
           { title: 'Otros', value: 'otros' },
         ],
         layout: 'dropdown',
