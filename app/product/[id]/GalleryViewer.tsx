@@ -194,11 +194,11 @@ export default function GalleryViewer({ images, productName }: { images: string[
           >
             ✕
           </button>
-          <Image
+        <Image
             src={activeImage}
             alt={productName}
             fill
-            className={isFirstImage ? 'object-contain p-8' : 'object-cover'}
+            className={isFirstImage ? 'object-contain p-8' : 'object-contain'}
             sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
