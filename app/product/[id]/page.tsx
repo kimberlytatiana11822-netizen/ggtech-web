@@ -3,6 +3,7 @@ import { urlFor } from '@/sanity/lib/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import GalleryViewer from './GalleryViewer'
+import ProductActions from './ProductActions'
 import { TruckIcon, LockIcon, CheckIcon } from '@/app/icons'
 import type { Metadata } from 'next'
 import type { Product } from '@/app/types'
@@ -16,6 +17,7 @@ async function getProduct(id: string): Promise<Product | null> {
     description,
     shortDescription,
     category,
+    stock,
     image,
     images
   }`
@@ -115,11 +117,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
               </div>
             </div>
 
-            <div className="mt-10 pt-6 border-t border-neutral-800">
-              <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-neutral-950 font-black py-4 px-6 rounded-xl shadow-[0_0_25px_rgba(34,211,238,0.4)] transition-all duration-300 uppercase tracking-wider text-xs cursor-pointer">
-                Añadir al carrito
-              </button>
-            </div>
+            <ProductActions name={product.name} price={product.price} stock={product.stock} />
           </div>
         </div>
 

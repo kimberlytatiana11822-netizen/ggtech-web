@@ -8,6 +8,7 @@ export interface Product {
   description?: string
   shortDescription?: string
   category?: string
+  stock?: number
   image: SanityImageSource
   images?: SanityImageSource[]
 }
