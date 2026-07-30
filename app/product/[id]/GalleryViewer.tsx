@@ -55,14 +55,44 @@ export default function GalleryViewer({ images, productName }: { images: string[
     })
   }, [images])
 
-  const touchStartX = useRef(0)
+  const dragStartX = useRef(0)
+  const wasDragged = useRef(false)
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX
+    wasDragged.current = false
+    dragStartX.current = e.touches[0].clientX
+  }, [])
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (Math.abs(dragStartX.current - e.touches[0].clientX) > 15) {
+      wasDragged.current = true
+    }
   }, [])
 
   const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-    const diff = touchStartX.current - e.changedTouches[0].clientX
+    if (!wasDragged.current) return
+    const diff = dragStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) goToNext()
+      else goToPrev()
+    }
+  }, [goToNext, goToPrev])
+
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    wasDragged.current = false
+    dragStartX.current = e.clientX
+  }, [])
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (e.buttons !== 1) return
+    if (Math.abs(dragStartX.current - e.clientX) > 15) {
+      wasDragged.current = true
+    }
+  }, [])
+
+  const handleMouseUp = useCallback((e: React.MouseEvent) => {
+    if (!wasDragged.current) return
+    const diff = dragStartX.current - e.clientX
     if (Math.abs(diff) > 50) {
       if (diff > 0) goToNext()
       else goToPrev()
@@ -114,30 +144,17 @@ export default function GalleryViewer({ images, productName }: { images: string[
     </button>
   ) : null
 
-  const mobileNavButtons = images.length > 1 ? (
-    <>
-      <button
-        onClick={(e) => { e.stopPropagation(); goToPrev() }}
-        className="md:hidden absolute left-2 top-1/2 -translate-y-1/2 bg-neutral-900/80 backdrop-blur-md text-white w-10 h-10 rounded-full font-bold flex items-center justify-center hover:bg-cyan-500 hover:text-neutral-950 transition-colors z-10 cursor-pointer shadow-md text-xl"
-        aria-label="Imagen anterior"
-      >
-        ‹
-      </button>
-      <button
-        onClick={(e) => { e.stopPropagation(); goToNext() }}
-        className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 bg-neutral-900/80 backdrop-blur-md text-white w-10 h-10 rounded-full font-bold flex items-center justify-center hover:bg-cyan-500 hover:text-neutral-950 transition-colors z-10 cursor-pointer shadow-md text-xl"
-        aria-label="Imagen siguiente"
-      >
-        ›
-      </button>
-    </>
-  ) : null
+
 
   const modal = showModal ? (
     <div 
-      onClick={() => setIsZoomed(false)}
+      onClick={(e) => { if (wasDragged.current) { wasDragged.current = false; return }; setIsZoomed(false) }}
       onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
       className={`fixed inset-0 z-50 flex items-center justify-center gap-3 p-4 overflow-y-auto cursor-zoom-out transition-opacity duration-300 ${
         animateIn ? 'opacity-100 bg-neutral-950/90 backdrop-blur-md' : 'opacity-0 bg-neutral-950/0 backdrop-blur-none'
       }`}
@@ -156,8 +173,7 @@ export default function GalleryViewer({ images, productName }: { images: string[
           >
             ✕
           </button>
-          {mobileNavButtons}
-          <Image
+        <Image
             src={activeImage}
             alt={productName}
             width={800}
@@ -178,7 +194,6 @@ export default function GalleryViewer({ images, productName }: { images: string[
           >
             ✕
           </button>
-          {mobileNavButtons}
           <Image
             src={activeImage}
             alt={productName}
@@ -196,9 +211,13 @@ export default function GalleryViewer({ images, productName }: { images: string[
     <div className="flex flex-col gap-4">
       {isWideImage ? (
         <div
-          onClick={() => setIsZoomed(true)}
+          onClick={(e) => { if (wasDragged.current) { wasDragged.current = false; return }; setIsZoomed(true) }}
           onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
           className="w-full rounded-2xl relative overflow-hidden shadow-2xl cursor-zoom-in group bg-neutral-900"
         >
           <Image
@@ -215,9 +234,13 @@ export default function GalleryViewer({ images, productName }: { images: string[
         </div>
       ) : (
         <div 
-          onClick={() => setIsZoomed(true)}
+          onClick={(e) => { if (wasDragged.current) { wasDragged.current = false; return }; setIsZoomed(true) }}
           onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
           className={`w-full h-80 md:h-96 rounded-2xl flex items-center justify-center relative overflow-hidden shadow-2xl cursor-zoom-in group ${
             isFirstImage ? 'bg-white p-8' : 'bg-neutral-900'
           }`}
