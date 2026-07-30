@@ -114,7 +114,6 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
                       <div className="text-neutral-500 text-xs font-mono">Sin Imagen</div>
                     )}
                     
-                    <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-neutral-900/80 to-transparent opacity-100 backdrop-blur-[2px]"></div>
                   </div>
 
                   <div className="p-6 flex flex-col flex-grow relative z-10">
