@@ -106,22 +106,29 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
 
             {filtersOpen && (
               <div className="absolute top-full right-0 mt-2 w-52 bg-neutral-900 border border-neutral-700 rounded-xl shadow-2xl shadow-black/50 overflow-hidden z-50">
-                {QUICK_FILTERS.map((f) => (
+                {QUICK_FILTERS.map((f) => {
+                  const isSelected = activeFilter === f.label
+                  return (
                   <button
                     key={f.label}
                     onClick={() => {
-                      setActiveFilter(activeFilter === f.label ? null : f.label)
+                      setActiveFilter(isSelected ? null : f.label)
                       setFiltersOpen(false)
                     }}
-                    className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors ${
-                      activeFilter === f.label
+                    className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors ${
+                      isSelected
                         ? 'bg-cyan-600/20 text-cyan-400'
                         : 'text-neutral-300 hover:bg-neutral-800 hover:text-white'
                     }`}
                   >
                     {f.label}
+                    {isSelected && (
+                      <svg className="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
                   </button>
-                ))}
+                )})
                 {activeFilter && (
                   <button
                     onClick={() => { setActiveFilter(null); setFiltersOpen(false) }}
