@@ -101,13 +101,13 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
                     </span>
                   </div>
 
-                  <div className="w-full aspect-[4/3] bg-neutral-900 relative overflow-hidden">
+                  <div className="w-full h-64 bg-white flex items-center justify-center relative overflow-hidden">
                     {mainImg ? (
                       <Image
                         src={urlFor(mainImg).url()}
                         alt={product.name}
                         fill
-                        className="object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
+                        className="object-contain p-8 transform group-hover:scale-110 transition-transform duration-700 ease-out"
                         sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                       />
                     ) : (
