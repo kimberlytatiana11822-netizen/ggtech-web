@@ -2,6 +2,8 @@ import { client } from '@/sanity/lib/client'
 import CatalogView from './CatalogView'
 import type { Product } from './types'
 
+export const dynamic = 'force-dynamic'
+
 async function getProducts(): Promise<Product[]> {
   const query = `*[_type == "product"]{
     _id,
