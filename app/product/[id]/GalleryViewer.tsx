@@ -188,14 +188,14 @@ export default function GalleryViewer({ images, productName }: { images: string[
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        className="w-full rounded-2xl relative overflow-hidden shadow-2xl cursor-zoom-in group bg-neutral-900"
+        className="w-full aspect-[4/3] rounded-2xl relative overflow-hidden shadow-2xl cursor-zoom-in group bg-[#0a0a0a]"
       >
         <Image
           src={activeImage}
           alt={productName}
-          width={1200}
-          height={900}
-          className="w-full h-auto max-h-[85vh] object-contain transition-transform duration-500 group-hover:scale-105"
+          fill
+          className="object-contain transition-transform duration-500 group-hover:scale-105"
+          sizes="(max-width: 768px) 100vw, 50vw"
         />
         <div className="absolute bottom-3 right-3 bg-neutral-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
           <span>Click para ampliar</span>
