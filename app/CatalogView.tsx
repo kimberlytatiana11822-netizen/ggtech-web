@@ -109,26 +109,27 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
                 {QUICK_FILTERS.map((f) => {
                   const isSelected = activeFilter === f.label
                   return (
-                  <button
-                    key={f.label}
-                    onClick={() => {
-                      setActiveFilter(isSelected ? null : f.label)
-                      setFiltersOpen(false)
-                    }}
-                    className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors ${
-                      isSelected
-                        ? 'bg-cyan-600/20 text-cyan-400'
-                        : 'text-neutral-300 hover:bg-neutral-800 hover:text-white'
-                    }`}
-                  >
-                    {f.label}
-                    {isSelected && (
-                      <svg className="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
-                    )}
-                  </button>
-                )})
+                    <button
+                      key={f.label}
+                      onClick={() => {
+                        setActiveFilter(isSelected ? null : f.label)
+                        setFiltersOpen(false)
+                      }}
+                      className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors ${
+                        isSelected
+                          ? 'bg-cyan-600/20 text-cyan-400'
+                          : 'text-neutral-300 hover:bg-neutral-800 hover:text-white'
+                      }`}
+                    >
+                      {f.label}
+                      {isSelected && (
+                        <svg className="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      )}
+                    </button>
+                  )
+                })}
                 {activeFilter && (
                   <button
                     onClick={() => { setActiveFilter(null); setFiltersOpen(false) }}
