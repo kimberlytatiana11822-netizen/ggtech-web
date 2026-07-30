@@ -10,7 +10,7 @@ export default function Footer() {
               GG<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-indigo-400 to-cyan-400">TECH</span>
             </Link>
             <p className="text-neutral-400 text-sm mt-3 leading-relaxed max-w-md">
-              Tu tienda de tecnología en Uruguay. Productos seleccionados con los mejores precios.
+              Tu tienda de tecnología en Artigas. Productos seleccionados con los mejores precios.
             </p>
           </div>
 
@@ -25,7 +25,7 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-bold text-xs uppercase tracking-widest mb-4">Contacto</h3>
             <ul className="space-y-2 text-neutral-400 text-sm">
-              <li>Uruguay</li>
+              <li>Artigas, Uruguay</li>
               <li>contacto@ggtech.uy</li>
             </ul>
           </div>

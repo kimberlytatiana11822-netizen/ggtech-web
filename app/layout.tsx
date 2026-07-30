@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: "%s | GG TECH",
     default: "GG TECH — Tienda de Tecnología",
   },
-  description: "Catálogo de productos tecnológicos en Uruguay. Computadoras, periféricos, gaming y más.",
+  description: "Catálogo de productos tecnológicos en Artigas. Computadoras, periféricos, gaming y más.",
 };
 
 export const viewport: Viewport = {
