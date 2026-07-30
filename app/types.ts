@@ -6,6 +6,7 @@ export interface Product {
   shortName?: string
   price: number
   description?: string
+  shortDescription?: string
   category?: string
   image: SanityImageSource
   images?: SanityImageSource[]

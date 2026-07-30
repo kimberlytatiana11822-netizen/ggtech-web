@@ -14,6 +14,7 @@ async function getProduct(id: string): Promise<Product | null> {
     shortName,
     price,
     description,
+    shortDescription,
     category,
     image,
     images

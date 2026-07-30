@@ -122,7 +122,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
                       {product.shortName || product.name}
                     </h3>
                     <p className="text-neutral-400 text-xs mt-2 line-clamp-2 leading-relaxed font-light">
-                      {product.description || 'Sin descripción disponible.'}
+                      {product.shortDescription || product.description || 'Sin descripción disponible.'}
                     </p>
 
                     <div className="mt-auto pt-6 flex items-end justify-between">

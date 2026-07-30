@@ -58,9 +58,17 @@ export const product = defineType({
 
     defineField({
       name: 'description',
-      title: 'Descripción',
+      title: 'Descripción completa (detalle)',
       type: 'text',
       rows: 5,
+    }),
+
+    defineField({
+      name: 'shortDescription',
+      title: 'Descripción corta (página principal)',
+      type: 'text',
+      rows: 2,
+      description: 'Si se deja vacío, se usa la descripción completa',
     }),
 
     defineField({
