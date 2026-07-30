@@ -118,12 +118,6 @@ export default function GalleryViewer({ images, productName }: { images: string[
     )
   }
 
-  const isFirstImage = activeImage === images[0]
-  const isSecondImage = images.length > 1 && activeImage === images[1]
-  const isLastImage = images.length > 1 && activeImage === images[images.length - 1]
-  const isFourthImage = images.length > 3 && activeImage === images[3]
-  const isWideImage = isSecondImage || isFourthImage || isLastImage
-
   const prevButton = images.length > 1 ? (
     <button
       onClick={(e) => { e.stopPropagation(); goToPrev() }}
@@ -160,106 +154,54 @@ export default function GalleryViewer({ images, productName }: { images: string[
       }`}
     >
       {prevButton}
-      {isWideImage ? (
-        <div
-          onClick={(e) => e.stopPropagation()}
-          className={`relative max-w-2xl rounded-3xl overflow-hidden shadow-[0_0_40px_rgba(34,211,238,0.3)] my-auto bg-neutral-900 transition-all duration-300 flex items-center justify-center ${
-            animateIn ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
-          }`}
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className={`relative w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden shadow-[0_0_40px_rgba(34,211,238,0.3)] my-auto bg-neutral-900 transition-all duration-300 flex items-center justify-center ${
+          animateIn ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+        }`}
+      >
+        <button
+          onClick={() => setIsZoomed(false)}
+          className="absolute top-3 right-3 bg-neutral-900 text-white w-8 h-8 rounded-full font-bold flex items-center justify-center hover:bg-cyan-500 hover:text-neutral-950 transition-colors z-10 cursor-pointer shadow-md"
         >
-          <button 
-            onClick={() => setIsZoomed(false)}
-            className="absolute top-3 right-3 bg-neutral-900 text-white w-8 h-8 rounded-full font-bold flex items-center justify-center hover:bg-cyan-500 hover:text-neutral-950 transition-colors z-10 cursor-pointer shadow-md"
-          >
-            ✕
-          </button>
+          ✕
+        </button>
         <Image
-            src={activeImage}
-            alt={productName}
-            width={800}
-            height={600}
-            className="max-w-full max-h-[85vh] w-auto h-auto object-contain block"
-          />
-        </div>
-      ) : (
-        <div 
-          onClick={(e) => e.stopPropagation()}
-          className={`relative w-full max-w-2xl h-[80vh] rounded-3xl overflow-hidden shadow-[0_0_40px_rgba(34,211,238,0.3)] my-auto transition-all duration-300 flex items-center justify-center ${
-            animateIn ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
-          } ${isFirstImage ? 'bg-white p-8' : 'bg-neutral-900'}`}
-        >
-          <button 
-            onClick={() => setIsZoomed(false)}
-            className="absolute top-3 right-3 bg-neutral-900 text-white w-8 h-8 rounded-full font-bold flex items-center justify-center hover:bg-cyan-500 hover:text-neutral-950 transition-colors z-10 cursor-pointer shadow-md"
-          >
-            ✕
-          </button>
-        <Image
-            src={activeImage}
-            alt={productName}
-            fill
-            className={isFirstImage ? 'object-contain p-8' : 'object-contain'}
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
-        </div>
-      )}
+          src={activeImage}
+          alt={productName}
+          width={1200}
+          height={900}
+          className="w-full h-auto max-h-[85vh] object-contain"
+        />
+      </div>
       {nextButton}
     </div>
   ) : null
 
   return (
     <div className="flex flex-col gap-4">
-      {isWideImage ? (
-        <div
-          onClick={(e) => { if (wasDragged.current) { wasDragged.current = false; return }; setIsZoomed(true) }}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          className="w-full rounded-2xl relative overflow-hidden shadow-2xl cursor-zoom-in group bg-neutral-900"
-        >
-          <Image
-            src={activeImage}
-            alt={productName}
-            width={800}
-            height={600}
-            className="w-full h-auto block transition-transform duration-500 group-hover:scale-105"
-          />
-          <div className="absolute bottom-3 right-3 bg-neutral-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
-            <span>Click para ampliar</span>
-            <SearchIcon className="w-3 h-3" />
-          </div>
+      <div
+        onClick={(e) => { if (wasDragged.current) { wasDragged.current = false; return }; setIsZoomed(true) }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        className="w-full h-80 md:h-96 rounded-2xl flex items-center justify-center relative overflow-hidden shadow-2xl cursor-zoom-in group bg-neutral-900"
+      >
+        <Image
+          src={activeImage}
+          alt={productName}
+          fill
+          className="object-contain p-2 transition-transform duration-500 group-hover:scale-105"
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+        <div className="absolute bottom-3 right-3 bg-neutral-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+          <span>Click para ampliar</span>
+          <SearchIcon className="w-3 h-3" />
         </div>
-      ) : (
-        <div 
-          onClick={(e) => { if (wasDragged.current) { wasDragged.current = false; return }; setIsZoomed(true) }}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          className={`w-full h-80 md:h-96 rounded-2xl flex items-center justify-center relative overflow-hidden shadow-2xl cursor-zoom-in group ${
-            isFirstImage ? 'bg-white p-8' : 'bg-neutral-900'
-          }`}
-        >
-          <Image
-            src={activeImage}
-            alt={productName}
-            fill
-            className={`transition-transform duration-500 group-hover:scale-105 ${
-              isFirstImage ? 'object-contain p-8' : 'object-cover'
-            }`}
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
-          <div className="absolute bottom-3 right-3 bg-neutral-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
-            <span>Click para ampliar</span>
-            <SearchIcon className="w-3 h-3" />
-          </div>
-        </div>
-      )}
+      </div>
 
       {images.length > 1 && (
         <div
