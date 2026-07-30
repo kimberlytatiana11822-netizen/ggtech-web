@@ -156,7 +156,7 @@ export default function GalleryViewer({ images, productName }: { images: string[
       {prevButton}
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`relative w-full max-w-4xl aspect-[4/3] rounded-3xl overflow-hidden shadow-[0_0_40px_rgba(34,211,238,0.3)] my-auto bg-[#0a0a0a] transition-all duration-300 ${
+        className={`relative w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden my-auto transition-all duration-300 flex items-center justify-center ${
           animateIn ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
         }`}
       >
@@ -169,9 +169,9 @@ export default function GalleryViewer({ images, productName }: { images: string[
         <Image
           src={activeImage}
           alt={productName}
-          fill
-          className="object-contain"
-          sizes="(max-width: 768px) 100vw, 50vw"
+          width={1200}
+          height={900}
+          className="w-full h-auto max-h-[85vh] object-contain"
         />
       </div>
       {nextButton}
