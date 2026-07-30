@@ -9,7 +9,7 @@ export default function ProductActions({ name, price, stock }: { name: string; p
   const productText = `Hola! Me interesa "${name}" a $${price} UY`
 
   const handleWhatsApp = () => {
-    window.open(`https://wa.me/598?text=${encodeURIComponent(productText)}`, '_blank')
+    window.open(`https://wa.me/59898610733?text=${encodeURIComponent(productText)}`, '_blank')
   }
 
   const handleShare = async () => {
