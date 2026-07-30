@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import GalleryViewer from './GalleryViewer'
 import ProductActions from './ProductActions'
+import DescriptionCard from './DescriptionCard'
 import { TruckIcon, LockIcon, CheckIcon } from '@/app/icons'
 import type { Metadata } from 'next'
 import type { Product } from '@/app/types'
@@ -104,16 +105,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
               </div>
               
               <div className="mt-8">
-                <div className="relative rounded-2xl bg-gradient-to-br from-cyan-500/10 via-blue-500/5 to-transparent border border-cyan-500/20 p-6 overflow-hidden">
-                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-cyan-500/20 blur-3xl rounded-full pointer-events-none" />
-                  <div className="relative flex items-center gap-2 mb-4">
-                    <span className="w-1 h-4 bg-cyan-400 rounded-full shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
-                    <h3 className="text-xs font-bold text-cyan-400 uppercase tracking-widest">Descripción</h3>
-                  </div>
-                  <p className="relative text-neutral-200 text-sm leading-relaxed font-light whitespace-pre-line">
-                    {product.description || 'Sin descripción disponible.'}
-                  </p>
-                </div>
+                <DescriptionCard description={product.description} />
               </div>
             </div>
 
