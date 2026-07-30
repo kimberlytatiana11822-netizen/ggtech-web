@@ -8,6 +8,7 @@ async function getProducts(): Promise<Product[]> {
   const query = `*[_type == "product"]{
     _id,
     name,
+    shortName,
     price,
     description,
     category,

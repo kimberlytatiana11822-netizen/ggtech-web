@@ -11,6 +11,7 @@ async function getProduct(id: string): Promise<Product | null> {
   const query = `*[_type == "product" && _id == $id][0]{
     _id,
     name,
+    shortName,
     price,
     description,
     category,

@@ -8,9 +8,16 @@ export const product = defineType({
   fields: [
     defineField({
       name: 'name',
-      title: 'Nombre del producto',
+      title: 'Nombre completo (detalle)',
       type: 'string',
       validation: (Rule) => Rule.required(),
+    }),
+
+    defineField({
+      name: 'shortName',
+      title: 'Nombre corto (página principal)',
+      type: 'string',
+      description: 'Si se deja vacío, se usa el nombre completo',
     }),
 
     defineField({
