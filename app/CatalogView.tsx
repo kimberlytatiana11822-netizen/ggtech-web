@@ -78,7 +78,11 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
               return (
                 <button
                   key={cat}
-                  onClick={() => setSelectedCategory(cat)}
+                  onClick={() => {
+                    setSelectedCategory(cat)
+                    setActiveFilter(null)
+                    setFiltersOpen(false)
+                  }}
                   role="tab"
                   aria-selected={isActive}
                   className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 whitespace-nowrap ${
@@ -93,60 +97,62 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
             })}
           </nav>
 
-          <div className="relative">
-            <button
-              onClick={() => setFiltersOpen(!filtersOpen)}
-              aria-expanded={filtersOpen}
-              aria-haspopup="menu"
-              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
-                activeFilter
-                  ? 'bg-orange-600 text-white shadow-[0_0_15px_rgba(234,88,12,0.4)] border border-orange-400/50'
-                  : 'bg-stone-900/50 text-stone-400 hover:text-stone-100 hover:bg-stone-800 border border-stone-800'
-              }`}
-            >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-              </svg>
-              {activeFilter || 'Filtros'}
-            </button>
+          {selectedCategory !== 'Todos' && (
+            <div className="relative">
+              <button
+                onClick={() => setFiltersOpen(!filtersOpen)}
+                aria-expanded={filtersOpen}
+                aria-haspopup="menu"
+                className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
+                  activeFilter
+                    ? 'bg-orange-600 text-white shadow-[0_0_15px_rgba(234,88,12,0.4)] border border-orange-400/50'
+                    : 'bg-stone-900/50 text-stone-400 hover:text-stone-100 hover:bg-stone-800 border border-stone-800'
+                }`}
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                {activeFilter || 'Filtros'}
+              </button>
 
-            {filtersOpen && (
-              <div className="absolute top-full right-0 mt-2 w-52 bg-stone-900 border border-stone-700 rounded-xl shadow-2xl shadow-black/50 overflow-hidden z-50">
-                {QUICK_FILTERS.map((f) => {
-                  const isSelected = activeFilter === f.label
-                  return (
+              {filtersOpen && (
+                <div className="absolute top-full right-0 mt-2 w-52 bg-stone-900 border border-stone-700 rounded-xl shadow-2xl shadow-black/50 overflow-hidden z-50">
+                  {QUICK_FILTERS.map((f) => {
+                    const isSelected = activeFilter === f.label
+                    return (
+                      <button
+                        key={f.label}
+                        onClick={() => {
+                          setActiveFilter(isSelected ? null : f.label)
+                          setFiltersOpen(false)
+                        }}
+                        className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors ${
+                          isSelected
+                            ? 'bg-orange-600/20 text-orange-400'
+                            : 'text-stone-300 hover:bg-stone-800 hover:text-stone-100'
+                        }`}
+                      >
+                        {f.label}
+                        {isSelected && (
+                          <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </button>
+                    )
+                  })}
+                  {activeFilter && (
                     <button
-                      key={f.label}
-                      onClick={() => {
-                        setActiveFilter(isSelected ? null : f.label)
-                        setFiltersOpen(false)
-                      }}
-                      className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors ${
-                        isSelected
-                          ? 'bg-orange-600/20 text-orange-400'
-                          : 'text-stone-300 hover:bg-stone-800 hover:text-stone-100'
-                      }`}
+                      onClick={() => { setActiveFilter(null); setFiltersOpen(false) }}
+                      className="w-full text-left px-4 py-3 text-xs text-stone-500 hover:text-stone-300 border-t border-stone-800 transition-colors"
                     >
-                      {f.label}
-                      {isSelected && (
-                        <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                      )}
+                      Limpiar filtro
                     </button>
-                  )
-                })}
-                {activeFilter && (
-                  <button
-                    onClick={() => { setActiveFilter(null); setFiltersOpen(false) }}
-                    className="w-full text-left px-4 py-3 text-xs text-stone-500 hover:text-stone-300 border-t border-stone-800 transition-colors"
-                  >
-                    Limpiar filtro
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </header>
 
