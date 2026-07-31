@@ -11,8 +11,7 @@ import { SITE } from '@/app/config'
 import type { Metadata } from 'next'
 import type { Product } from '@/app/types'
 
-export const revalidate = 3600
-export const dynamicParams = true
+export const dynamic = 'force-dynamic'
 
 const getProduct = cache(async (id: string): Promise<Product | null> => {
   const query = `*[_type == "product" && _id == $id][0]{
@@ -30,15 +29,6 @@ const getProduct = cache(async (id: string): Promise<Product | null> => {
   return await client.fetch(query, { id })
 })
 
-export async function generateStaticParams() {
-  try {
-    const ids = await client.fetch<{ _id: string }[]>(`*[_type == "product"]{_id}`)
-    return ids.map((p) => ({ id: p._id }))
-  } catch {
-    return []
-  }
-}
-
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params
   const product = await getProduct(id)
@@ -52,7 +42,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       description: product.description || `Producto ${product.name} en Artigas Shop`,
       type: 'website',
       images: ogImage
-        ? [{ url: urlFor(ogImage).url(), alt: product.name }]
+        ? [{ url: urlFor(ogImage).width(1200).auto('format').url(), alt: product.name }]
         : undefined,
     },
   }
@@ -68,7 +58,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   const seen = new Set<string>()
 
   const addImage = (img: Parameters<typeof urlFor>[0]) => {
-    const url = urlFor(img).url()
+    const url = urlFor(img).width(1200).auto('format').url()
     if (!seen.has(url)) {
       seen.add(url)
       allImages.push(url)

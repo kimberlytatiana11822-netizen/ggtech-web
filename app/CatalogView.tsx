@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { urlFor } from '@/sanity/lib/image'
 import { SearchIcon } from './icons'
 import type { Product } from './types'
@@ -25,20 +26,70 @@ const CATEGORY_FILTERS: Record<string, { label: string; keywords: string[] }[]> 
   ],
 }
 
-export default function CatalogView({ initialProducts }: { initialProducts: Product[] }) {
-  const [selectedCategory, setSelectedCategory] = useState<string>('Todos')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [activeFilter, setActiveFilter] = useState<string | null>(null)
+const SORT_OPTIONS = [
+  { value: 'relevance', label: 'Orden: Relevancia' },
+  { value: 'price-asc', label: 'Precio: menor a mayor' },
+  { value: 'price-desc', label: 'Precio: mayor a menor' },
+] as const
+
+type SortValue = typeof SORT_OPTIONS[number]['value']
+
+export default function CatalogView({
+  initialProducts,
+  initialCategory,
+  initialQuery,
+  initialFilter,
+  initialSort,
+}: {
+  initialProducts: Product[]
+  initialCategory?: string
+  initialQuery?: string
+  initialFilter?: string
+  initialSort?: string
+}) {
+  const pathname = usePathname()
+
+  const validCategory = initialCategory && Object.keys(CATEGORY_GROUPS).includes(initialCategory)
+    ? initialCategory
+    : 'Todos'
+  const validSort = SORT_OPTIONS.some((o) => o.value === initialSort) ? initialSort as SortValue : 'relevance'
+
+  const [selectedCategory, setSelectedCategory] = useState<string>(validCategory)
+  const [searchQuery, setSearchQuery] = useState(initialQuery ?? '')
+  const [activeFilter, setActiveFilter] = useState<string | null>(initialFilter ?? null)
   const [filtersOpen, setFiltersOpen] = useState(false)
-  const [sortBy, setSortBy] = useState<'relevance' | 'price-asc' | 'price-desc'>('relevance')
+  const [sortBy, setSortBy] = useState<SortValue>(validSort)
   const [sortOpen, setSortOpen] = useState(false)
 
-  const SORT_OPTIONS = [
-    { value: 'relevance', label: 'Orden: Relevancia' },
-    { value: 'price-asc', label: 'Precio: menor a mayor' },
-    { value: 'price-desc', label: 'Precio: mayor a menor' },
-  ] as const
   const sortLabel = SORT_OPTIONS.find(o => o.value === sortBy)?.label ?? SORT_OPTIONS[0].label
+
+  const filtersRef = useRef<HTMLDivElement>(null)
+  const sortRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const params = new URLSearchParams()
+    if (selectedCategory !== 'Todos') params.set('categoria', selectedCategory)
+    if (searchQuery) params.set('q', searchQuery)
+    if (activeFilter) params.set('filtro', activeFilter)
+    if (sortBy !== 'relevance') params.set('orden', sortBy)
+    const qs = params.toString()
+    window.history.replaceState(null, '', qs ? `${pathname}?${qs}` : pathname)
+  }, [selectedCategory, searchQuery, activeFilter, sortBy, pathname])
+
+  useEffect(() => {
+    if (!filtersOpen && !sortOpen) return
+    const handleClick = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as Node
+      if (filtersRef.current && !filtersRef.current.contains(target)) setFiltersOpen(false)
+      if (sortRef.current && !sortRef.current.contains(target)) setSortOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    document.addEventListener('touchstart', handleClick)
+    return () => {
+      document.removeEventListener('mousedown', handleClick)
+      document.removeEventListener('touchstart', handleClick)
+    }
+  }, [filtersOpen, sortOpen])
 
   const matchesQuickFilter = (p: Product, filter: { label: string; keywords: string[] }) => {
     const text = [p.name, p.shortName].filter(Boolean).join(' ').toLowerCase()
@@ -113,7 +164,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
           </nav>
 
           {selectedCategory !== 'Todos' && categoryFilters.length > 0 && (
-            <div className="relative">
+            <div className="relative" ref={filtersRef}>
               <button
                 onClick={() => setFiltersOpen(!filtersOpen)}
                 aria-expanded={filtersOpen}
@@ -193,7 +244,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
               className="w-full bg-stone-900/80 border border-stone-700 rounded-xl pl-10 pr-4 py-2.5 text-sm text-stone-100 placeholder-stone-500 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-all"
             />
           </label>
-          <div className="relative self-center sm:self-auto sm:shrink-0">
+          <div className="relative self-center sm:self-auto sm:shrink-0" ref={sortRef}>
             <button
               onClick={() => setSortOpen(!sortOpen)}
               aria-expanded={sortOpen}
@@ -271,7 +322,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
                   <div className="w-full aspect-[4/3] bg-stone-900 relative overflow-hidden">
                     {mainImg ? (
                       <Image
-                        src={urlFor(mainImg).url()}
+                        src={urlFor(mainImg).width(900).auto('format').url()}
                         alt={product.name}
                         fill
                         priority={index < 6}
