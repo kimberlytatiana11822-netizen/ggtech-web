@@ -8,7 +8,7 @@ import { SearchIcon } from './icons'
 import type { Product } from './types'
 
 const CATEGORY_GROUPS: Record<string, string[]> = {
-  Electrónica: ['electronica', 'computadoras', 'perifericos', 'accesorios', 'gaming', 'otros'],
+  Electrónica: ['electronica', 'computadoras', 'accesorios', 'gaming', 'otros'],
   Cocina: ['cocina', 'hogar'],
 }
 
@@ -24,6 +24,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
   const [searchQuery, setSearchQuery] = useState('')
   const [activeFilter, setActiveFilter] = useState<string | null>(null)
   const [filtersOpen, setFiltersOpen] = useState(false)
+  const [sortBy, setSortBy] = useState<'relevance' | 'price-asc' | 'price-desc'>('relevance')
 
   const matchesQuickFilter = (p: Product, filter: typeof QUICK_FILTERS[number]) => {
     const text = [p.name, p.shortName].filter(Boolean).join(' ').toLowerCase()
@@ -31,7 +32,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
     return words.some(w => filter.keywords.includes(w))
   }
 
-  const categories = ['Todos', 'Electrónica', 'Cocina']
+  const categories = ['Todos', ...Object.keys(CATEGORY_GROUPS)]
 
   const searchableText = (p: Product) =>
     [p.name, p.shortName, p.description, p.shortDescription, p.category]
@@ -53,6 +54,9 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
     const matchesFilter = !activeFilter || !filterDef || matchesQuickFilter(p, filterDef)
     return matchesCategory && matchesSearch && matchesFilter
   })
+
+  if (sortBy === 'price-asc') filteredProducts.sort((a, b) => a.price - b.price)
+  if (sortBy === 'price-desc') filteredProducts.sort((a, b) => b.price - a.price)
 
   return (
     <main className="min-h-screen bg-stone-950 text-stone-100 selection:bg-orange-500 selection:text-stone-950 relative">
@@ -92,6 +96,8 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
           <div className="relative">
             <button
               onClick={() => setFiltersOpen(!filtersOpen)}
+              aria-expanded={filtersOpen}
+              aria-haspopup="menu"
               className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
                 activeFilter
                   ? 'bg-orange-600 text-white shadow-[0_0_15px_rgba(234,88,12,0.4)] border border-orange-400/50'
@@ -154,15 +160,28 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
           </span>
         </div>
 
-        <div className="relative max-w-xs mb-6">
-          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500 pointer-events-none" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Filtrar productos..."
-            className="w-full bg-stone-900/80 border border-stone-700 rounded-xl pl-10 pr-4 py-2.5 text-sm text-stone-100 placeholder-stone-500 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-all"
-          />
+        <div className="mb-6 flex flex-col sm:flex-row gap-3 sm:items-center">
+          <label className="relative max-w-xs flex-1">
+            <span className="sr-only">Buscar productos</span>
+            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500 pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Filtrar productos..."
+              className="w-full bg-stone-900/80 border border-stone-700 rounded-xl pl-10 pr-4 py-2.5 text-sm text-stone-100 placeholder-stone-500 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-all"
+            />
+          </label>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as 'relevance' | 'price-asc' | 'price-desc')}
+            aria-label="Ordenar productos"
+            className="bg-stone-900/80 border border-stone-700 rounded-xl px-3 py-2.5 text-sm text-stone-100 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-all cursor-pointer sm:w-auto"
+          >
+            <option value="relevance">Orden: Relevancia</option>
+            <option value="price-asc">Precio: menor a mayor</option>
+            <option value="price-desc">Precio: mayor a menor</option>
+          </select>
         </div>
 
         {filteredProducts.length === 0 ? (
@@ -171,7 +190,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProducts.map((product) => {
+            {filteredProducts.map((product, index) => {
               const mainImg = product.image || (product.images && product.images[0])
 
               return (
@@ -191,6 +210,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
                         src={urlFor(mainImg).url()}
                         alt={product.name}
                         fill
+                        priority={index < 6}
                         className="object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />

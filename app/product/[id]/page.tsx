@@ -2,14 +2,19 @@ import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { cache } from 'react'
 import GalleryViewer from './GalleryViewer'
 import ProductActions from './ProductActions'
 import DescriptionCard from './DescriptionCard'
 import { TruckIcon, LockIcon, CheckIcon } from '@/app/icons'
+import { SITE } from '@/app/config'
 import type { Metadata } from 'next'
 import type { Product } from '@/app/types'
 
-async function getProduct(id: string): Promise<Product | null> {
+export const revalidate = 3600
+export const dynamicParams = true
+
+const getProduct = cache(async (id: string): Promise<Product | null> => {
   const query = `*[_type == "product" && _id == $id][0]{
     _id,
     name,
@@ -23,15 +28,33 @@ async function getProduct(id: string): Promise<Product | null> {
     images
   }`
   return await client.fetch(query, { id })
+})
+
+export async function generateStaticParams() {
+  try {
+    const ids = await client.fetch<{ _id: string }[]>(`*[_type == "product"]{_id}`)
+    return ids.map((p) => ({ id: p._id }))
+  } catch {
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params
   const product = await getProduct(id)
   if (!product) return {}
+  const ogImage = product.image || (product.images && product.images[0])
   return {
     title: product.name,
     description: product.description || `Producto ${product.name} en Artigas Shop`,
+    openGraph: {
+      title: product.name,
+      description: product.description || `Producto ${product.name} en Artigas Shop`,
+      type: 'website',
+      images: ogImage
+        ? [{ url: urlFor(ogImage).url(), alt: product.name }]
+        : undefined,
+    },
   }
 }
 
@@ -42,11 +65,18 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   if (!product) notFound()
 
   const allImages: string[] = []
-  
-  if (product.image) allImages.push(urlFor(product.image).url())
-  if (product.images) {
-    product.images.forEach((img) => allImages.push(urlFor(img).url()))
+  const seen = new Set<string>()
+
+  const addImage = (img: Parameters<typeof urlFor>[0]) => {
+    const url = urlFor(img).url()
+    if (!seen.has(url)) {
+      seen.add(url)
+      allImages.push(url)
+    }
   }
+
+  if (product.image) addImage(product.image)
+  if (product.images) product.images.forEach(addImage)
 
   const trustBadges = [
     { icon: TruckIcon, label: 'Envío', sub: 'Artigas' },
@@ -54,9 +84,32 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     { icon: CheckIcon, label: 'Garantía', sub: '3 dias' },
   ]
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.description || undefined,
+    image: allImages.length > 0 ? allImages[0] : undefined,
+    url: `${SITE.url}/product/${product._id}`,
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'UYU',
+      price: product.price,
+      availability:
+        product.stock && product.stock > 0
+          ? 'https://schema.org/InStock'
+          : 'https://schema.org/OutOfStock',
+    },
+  }
+
   return (
     <main className="min-h-screen bg-stone-950 text-stone-100 py-12 px-6 relative selection:bg-orange-500 selection:text-stone-950 overflow-x-hidden">
-      
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[350px] bg-gradient-to-tr from-orange-600/15 via-amber-600/10 to-yellow-500/15 blur-[130px] pointer-events-none rounded-full" />
 
       <div className="max-w-5xl mx-auto relative z-10">

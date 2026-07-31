@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { WhatsAppIcon, ShareIcon } from '@/app/icons'
+import { SITE } from '@/app/config'
 
 export default function ProductActions({ name, price, stock }: { name: string; price: number; stock?: number }) {
   const [copied, setCopied] = useState(false)
@@ -9,7 +10,7 @@ export default function ProductActions({ name, price, stock }: { name: string; p
   const productText = `Hola! Me interesa "${name}" a $${price} UY`
 
   const handleWhatsApp = () => {
-    window.open(`https://wa.me/59898610733?text=${encodeURIComponent(productText)}`, '_blank')
+    window.open(`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(productText)}`, '_blank')
   }
 
   const handleShare = async () => {

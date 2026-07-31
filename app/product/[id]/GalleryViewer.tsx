@@ -1,59 +1,47 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useSyncExternalStore } from 'react'
 import Image from 'next/image'
 import { createPortal } from 'react-dom'
 import { SearchIcon } from '@/app/icons'
 
 export default function GalleryViewer({ images, productName }: { images: string[], productName: string }) {
-  const [activeImage, setActiveImage] = useState(images[0] || '')
-  const [isZoomed, setIsZoomed] = useState(false)
-  const [showModal, setShowModal] = useState(false)
+  const isClient = useSyncExternalStore(() => () => {}, () => true, () => false)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const activeImage = images[activeIndex]
+  const [isOpen, setIsOpen] = useState(false)
   const [animateIn, setAnimateIn] = useState(false)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  useEffect(() => {
-    if (isZoomed) {
-      setShowModal(true)
-      document.body.style.overflow = 'hidden'
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setAnimateIn(true)
-        })
-      })
-    } else {
-      setAnimateIn(false)
-      document.body.style.overflow = ''
-      const timer = setTimeout(() => setShowModal(false), 300)
-      return () => clearTimeout(timer)
-    }
-  }, [isZoomed])
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     return () => {
       document.body.style.overflow = ''
+      if (closeTimer.current) clearTimeout(closeTimer.current)
     }
   }, [])
 
-  const goToPrev = useCallback(() => {
-    setActiveImage((current) => {
-      const idx = images.indexOf(current)
-      const prevIdx = (idx - 1 + images.length) % images.length
-      return images[prevIdx]
+  const openModal = useCallback(() => {
+    setIsOpen(true)
+    document.body.style.overflow = 'hidden'
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setAnimateIn(true))
     })
-  }, [images])
+  }, [])
+
+  const closeModal = useCallback(() => {
+    setAnimateIn(false)
+    document.body.style.overflow = ''
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    closeTimer.current = setTimeout(() => setIsOpen(false), 300)
+  }, [])
+
+  const goToPrev = useCallback(() => {
+    setActiveIndex((current) => (current - 1 + images.length) % images.length)
+  }, [images.length])
 
   const goToNext = useCallback(() => {
-    setActiveImage((current) => {
-      const idx = images.indexOf(current)
-      const nextIdx = (idx + 1) % images.length
-      return images[nextIdx]
-    })
-  }, [images])
+    setActiveIndex((current) => (current + 1) % images.length)
+  }, [images.length])
 
   const dragStartX = useRef(0)
   const wasDragged = useRef(false)
@@ -100,15 +88,15 @@ export default function GalleryViewer({ images, productName }: { images: string[
   }, [goToNext, goToPrev])
 
   useEffect(() => {
-    if (!isZoomed) return
+    if (!isOpen) return
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') goToPrev()
       if (e.key === 'ArrowRight') goToNext()
-      if (e.key === 'Escape') setIsZoomed(false)
+      if (e.key === 'Escape') closeModal()
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isZoomed, goToPrev, goToNext])
+  }, [isOpen, goToPrev, goToNext, closeModal])
 
   if (images.length === 0) {
     return (
@@ -138,11 +126,9 @@ export default function GalleryViewer({ images, productName }: { images: string[
     </button>
   ) : null
 
-
-
-  const modal = showModal ? (
-    <div 
-      onClick={(e) => { if (wasDragged.current) { wasDragged.current = false; return }; setIsZoomed(false) }}
+  const modal = isOpen ? (
+    <div
+      onClick={() => { if (wasDragged.current) { wasDragged.current = false; return }; closeModal() }}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -161,8 +147,9 @@ export default function GalleryViewer({ images, productName }: { images: string[
         }`}
       >
         <button
-          onClick={() => setIsZoomed(false)}
+          onClick={closeModal}
           className="absolute top-3 right-3 bg-stone-900/80 backdrop-blur-md text-white w-8 h-8 rounded-full font-bold flex items-center justify-center hover:bg-orange-500 hover:text-stone-950 transition-colors z-10 cursor-pointer shadow-md"
+          aria-label="Cerrar imagen ampliada"
         >
           ✕
         </button>
@@ -181,7 +168,7 @@ export default function GalleryViewer({ images, productName }: { images: string[
   return (
     <div className="flex flex-col gap-4">
       <div
-        onClick={(e) => { if (wasDragged.current) { wasDragged.current = false; return }; setIsZoomed(true) }}
+        onClick={() => { if (wasDragged.current) { wasDragged.current = false; return }; openModal() }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -195,6 +182,7 @@ export default function GalleryViewer({ images, productName }: { images: string[
           alt={productName}
           width={1200}
           height={900}
+          priority
           className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute bottom-3 right-3 bg-stone-900/80 backdrop-blur-md text-stone-100 text-[10px] font-bold px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
@@ -209,16 +197,18 @@ export default function GalleryViewer({ images, productName }: { images: string[
           style={{ gridTemplateColumns: `repeat(${images.length}, minmax(0, 1fr))` }}
         >
           {images.map((img, index) => {
-            const isActive = activeImage === img
+            const isActive = index === activeIndex
             return (
               <button
                 key={index}
-                onClick={() => setActiveImage(img)}
+                onClick={() => setActiveIndex(index)}
                 className={`relative aspect-square bg-neutral-900 rounded-xl overflow-hidden cursor-pointer transition-all duration-200 border-2 ${
-                  isActive 
-                    ? 'border-orange-400 shadow-[0_0_20px_rgba(234,88,12,0.5)] opacity-100' 
+                  isActive
+                    ? 'border-orange-400 shadow-[0_0_20px_rgba(234,88,12,0.5)] opacity-100'
                     : 'border-stone-700 opacity-60 hover:opacity-100 hover:border-stone-500'
                 }`}
+                aria-label={`Ver imagen ${index + 1}`}
+                aria-current={isActive}
               >
                 <Image src={img} alt="" fill className="object-cover pointer-events-none" sizes="100px" />
               </button>
@@ -227,7 +217,7 @@ export default function GalleryViewer({ images, productName }: { images: string[
         </div>
       )}
 
-      {mounted && modal && createPortal(modal, document.body)}
+      {isClient && modal && createPortal(modal, document.body)}
     </div>
   )
 }

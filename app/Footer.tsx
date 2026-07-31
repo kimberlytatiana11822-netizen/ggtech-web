@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { SITE } from './config'
 
 export default function Footer() {
   return (
@@ -25,8 +26,8 @@ export default function Footer() {
           <div>
             <h3 className="text-stone-100 font-bold text-xs uppercase tracking-widest mb-4">Contacto</h3>
             <ul className="space-y-2 text-stone-400 text-sm">
-              <li>Artigas, Uruguay</li>
-              <li>contacto@artigasshop.uy</li>
+              <li>{SITE.location}</li>
+              <li>{SITE.email}</li>
             </ul>
           </div>
         </div>
