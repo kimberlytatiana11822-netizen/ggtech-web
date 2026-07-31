@@ -185,16 +185,21 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
               className="w-full bg-stone-900/80 border border-stone-700 rounded-xl pl-10 pr-4 py-2.5 text-sm text-stone-100 placeholder-stone-500 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-all"
             />
           </label>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as 'relevance' | 'price-asc' | 'price-desc')}
-            aria-label="Ordenar productos"
-            className="bg-stone-900/80 border border-stone-700 rounded-xl px-3 py-2.5 text-sm text-stone-100 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-all cursor-pointer w-auto self-center sm:self-auto sm:shrink-0"
-          >
-            <option value="relevance">Orden: Relevancia</option>
-            <option value="price-asc">Precio: menor a mayor</option>
-            <option value="price-desc">Precio: mayor a menor</option>
-          </select>
+          <div className="relative self-center sm:self-auto sm:shrink-0">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as 'relevance' | 'price-asc' | 'price-desc')}
+              aria-label="Ordenar productos"
+              className="bg-stone-900/80 border border-stone-700 rounded-xl pl-3 pr-4 py-2.5 text-sm text-stone-100 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-all cursor-pointer appearance-none w-auto"
+            >
+              <option value="relevance">Orden: Relevancia</option>
+              <option value="price-asc">Precio: menor a mayor</option>
+              <option value="price-desc">Precio: mayor a menor</option>
+            </select>
+            <svg className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 w-3 h-3 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
         </div>
 
         {filteredProducts.length === 0 ? (
