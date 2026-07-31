@@ -8,7 +8,7 @@ import { SearchIcon } from './icons'
 import type { Product } from './types'
 
 const CATEGORY_GROUPS: Record<string, string[]> = {
-  Electrónica: ['electronica', 'computadoras', 'accesorios', 'gaming', 'otros'],
+  Electrónica: ['electronica', 'computadoras', 'perifericos', 'accesorios', 'gaming', 'otros'],
   Cocina: ['cocina', 'hogar'],
 }
 

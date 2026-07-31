@@ -79,6 +79,7 @@ export const product = defineType({
         list: [
           { title: 'Electrónica', value: 'electronica' },
           { title: 'Computadoras', value: 'computadoras' },
+          { title: 'Periféricos', value: 'perifericos' },
           { title: 'Accesorios', value: 'accesorios' },
           { title: 'Gaming', value: 'gaming' },
           { title: 'Hogar', value: 'hogar' },
