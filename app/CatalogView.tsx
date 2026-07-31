@@ -174,7 +174,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
         </div>
 
         <div className="mb-6 flex flex-col sm:flex-row gap-3 sm:items-center">
-          <label className="relative max-w-xs flex-1">
+          <label className="relative w-full max-w-xs self-center sm:self-auto">
             <span className="sr-only">Buscar productos</span>
             <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500 pointer-events-none" />
             <input
@@ -189,7 +189,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'relevance' | 'price-asc' | 'price-desc')}
             aria-label="Ordenar productos"
-            className="bg-stone-900/80 border border-stone-700 rounded-xl px-3 py-2.5 text-sm text-stone-100 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-all cursor-pointer sm:w-auto"
+            className="bg-stone-900/80 border border-stone-700 rounded-xl px-3 py-2.5 text-sm text-stone-100 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-all cursor-pointer w-auto self-center sm:self-auto sm:shrink-0"
           >
             <option value="relevance">Orden: Relevancia</option>
             <option value="price-asc">Precio: menor a mayor</option>
