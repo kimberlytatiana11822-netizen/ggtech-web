@@ -13,10 +13,10 @@ const CATEGORY_GROUPS: Record<string, string[]> = {
 }
 
 const QUICK_FILTERS = [
-  { label: 'Mandos', keywords: ['mando', 'control', 'gamepad', 'joystick'] },
-  { label: 'Auriculares', keywords: ['auricular', 'headset', 'audifono', 'cascos'] },
-  { label: 'Teclados', keywords: ['teclado', 'keyboard'] },
-  { label: 'Cargadores', keywords: ['cargador', 'carga', 'charger', 'cable'] },
+  { label: 'Mandos', keywords: ['mando', 'mandos', 'gamepad', 'joystick', 'control'] },
+  { label: 'Auriculares', keywords: ['auricular', 'auriculares', 'headset', 'audifono'] },
+  { label: 'Teclados', keywords: ['teclado', 'teclados', 'keyboard'] },
+  { label: 'Cargadores', keywords: ['cargador', 'cargadores', 'charger'] },
 ]
 
 export default function CatalogView({ initialProducts }: { initialProducts: Product[] }) {
@@ -26,9 +26,9 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
   const [filtersOpen, setFiltersOpen] = useState(false)
 
   const matchesQuickFilter = (p: Product, filter: typeof QUICK_FILTERS[number]) => {
-    const text = [p.name, p.shortName, p.description, p.shortDescription]
-      .filter(Boolean).join(' ').toLowerCase()
-    return filter.keywords.some(k => text.includes(k))
+    const text = [p.name, p.shortName].filter(Boolean).join(' ').toLowerCase()
+    const words = text.split(/\s+/)
+    return words.some(w => filter.keywords.includes(w))
   }
 
   const categories = ['Todos', 'Electrónica', 'Cocina']
