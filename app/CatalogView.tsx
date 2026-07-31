@@ -12,12 +12,18 @@ const CATEGORY_GROUPS: Record<string, string[]> = {
   Cocina: ['cocina', 'hogar'],
 }
 
-const QUICK_FILTERS = [
-  { label: 'Mandos', keywords: ['mando', 'mandos', 'gamepad', 'joystick', 'control'] },
-  { label: 'Auriculares', keywords: ['auricular', 'auriculares', 'headset', 'audifono'] },
-  { label: 'Teclados', keywords: ['teclado', 'teclados', 'keyboard'] },
-  { label: 'Cargadores', keywords: ['cargador', 'cargadores', 'charger'] },
-]
+const CATEGORY_FILTERS: Record<string, { label: string; keywords: string[] }[]> = {
+  Electrónica: [
+    { label: 'Mandos', keywords: ['mando', 'mandos', 'gamepad', 'joystick', 'control'] },
+    { label: 'Auriculares', keywords: ['auricular', 'auriculares', 'headset', 'audifono'] },
+    { label: 'Teclados', keywords: ['teclado', 'teclados', 'keyboard'] },
+    { label: 'Cargadores', keywords: ['cargador', 'cargadores', 'charger'] },
+  ],
+  Cocina: [
+    { label: 'Trituradoras', keywords: ['trituradora', 'triturador', 'procesadora', 'picadora'] },
+    { label: 'Licuadoras', keywords: ['licuadora', 'licuadoras', 'juguera'] },
+  ],
+}
 
 export default function CatalogView({ initialProducts }: { initialProducts: Product[] }) {
   const [selectedCategory, setSelectedCategory] = useState<string>('Todos')
@@ -26,13 +32,14 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [sortBy, setSortBy] = useState<'relevance' | 'price-asc' | 'price-desc'>('relevance')
 
-  const matchesQuickFilter = (p: Product, filter: typeof QUICK_FILTERS[number]) => {
+  const matchesQuickFilter = (p: Product, filter: { label: string; keywords: string[] }) => {
     const text = [p.name, p.shortName].filter(Boolean).join(' ').toLowerCase()
     const words = text.split(/\s+/)
     return words.some(w => filter.keywords.includes(w))
   }
 
   const categories = ['Todos', ...Object.keys(CATEGORY_GROUPS)]
+  const categoryFilters = CATEGORY_FILTERS[selectedCategory] ?? []
 
   const searchableText = (p: Product) =>
     [p.name, p.shortName, p.description, p.shortDescription, p.category]
@@ -50,7 +57,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
         .toLowerCase()
         .split(/\s+/)
         .every((word) => searchableText(p).includes(word))
-    const filterDef = QUICK_FILTERS.find(f => f.label === activeFilter)
+    const filterDef = categoryFilters.find(f => f.label === activeFilter)
     const matchesFilter = !activeFilter || !filterDef || matchesQuickFilter(p, filterDef)
     return matchesCategory && matchesSearch && matchesFilter
   })
@@ -97,7 +104,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
             })}
           </nav>
 
-          {selectedCategory !== 'Todos' && (
+          {selectedCategory !== 'Todos' && categoryFilters.length > 0 && (
             <div className="relative">
               <button
                 onClick={() => setFiltersOpen(!filtersOpen)}
@@ -117,7 +124,7 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
 
               {filtersOpen && (
                 <div className="absolute top-full right-0 mt-2 w-52 bg-stone-900 border border-stone-700 rounded-xl shadow-2xl shadow-black/50 overflow-hidden z-50">
-                  {QUICK_FILTERS.map((f) => {
+                  {categoryFilters.map((f) => {
                     const isSelected = activeFilter === f.label
                     return (
                       <button
