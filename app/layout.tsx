@@ -15,16 +15,16 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | GG TECH",
-    default: "GG TECH — Tienda de Tecnología",
+    template: "%s | Artigas Shop",
+    default: "Artigas Shop — Tu tienda de confianza",
   },
-  description: "Catálogo de productos tecnológicos en Artigas. Computadoras, periféricos, gaming y más.",
+  description: "Artigas Shop — Encontrá todo lo que necesitás en un solo lugar. Tecnología, cocina y más.",
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0a0a0a",
+  themeColor: "#0c0a09",
 };
 
 export default function RootLayout({
