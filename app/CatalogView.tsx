@@ -31,6 +31,14 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
   const [activeFilter, setActiveFilter] = useState<string | null>(null)
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [sortBy, setSortBy] = useState<'relevance' | 'price-asc' | 'price-desc'>('relevance')
+  const [sortOpen, setSortOpen] = useState(false)
+
+  const SORT_OPTIONS = [
+    { value: 'relevance', label: 'Orden: Relevancia' },
+    { value: 'price-asc', label: 'Precio: menor a mayor' },
+    { value: 'price-desc', label: 'Precio: mayor a menor' },
+  ] as const
+  const sortLabel = SORT_OPTIONS.find(o => o.value === sortBy)?.label ?? SORT_OPTIONS[0].label
 
   const matchesQuickFilter = (p: Product, filter: { label: string; keywords: string[] }) => {
     const text = [p.name, p.shortName].filter(Boolean).join(' ').toLowerCase()
@@ -186,19 +194,57 @@ export default function CatalogView({ initialProducts }: { initialProducts: Prod
             />
           </label>
           <div className="relative self-center sm:self-auto sm:shrink-0">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as 'relevance' | 'price-asc' | 'price-desc')}
-              aria-label="Ordenar productos"
-              className="bg-stone-900/80 border border-stone-700 rounded-xl pl-3 pr-4 py-2.5 text-sm text-stone-100 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-all cursor-pointer appearance-none w-auto"
+            <button
+              onClick={() => setSortOpen(!sortOpen)}
+              aria-expanded={sortOpen}
+              aria-haspopup="listbox"
+              className="flex items-center gap-1.5 bg-stone-900/80 border border-stone-700 rounded-xl pl-3 pr-2.5 py-2.5 text-sm text-stone-100 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-all cursor-pointer"
             >
-              <option value="relevance">Orden: Relevancia</option>
-              <option value="price-asc">Precio: menor a mayor</option>
-              <option value="price-desc">Precio: mayor a menor</option>
-            </select>
-            <svg className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 w-3 h-3 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
+              <span className="whitespace-nowrap">{sortLabel}</span>
+              <svg
+                className={`w-3 h-3 text-stone-400 transition-transform duration-300 ${sortOpen ? 'rotate-180' : ''}`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            {sortOpen && (
+              <div
+                role="listbox"
+                className="absolute top-full right-0 mt-2 w-60 bg-stone-900 border border-stone-700 rounded-xl shadow-2xl shadow-black/50 overflow-hidden z-50 animate-dropdown-in"
+              >
+                {SORT_OPTIONS.map((opt) => {
+                  const isSelected = sortBy === opt.value
+                  return (
+                    <button
+                      key={opt.value}
+                      role="option"
+                      aria-selected={isSelected}
+                      onClick={() => {
+                        setSortBy(opt.value)
+                        setSortOpen(false)
+                      }}
+                      className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors ${
+                        isSelected
+                          ? 'bg-orange-600/20 text-orange-400'
+                          : 'text-stone-300 hover:bg-stone-800 hover:text-stone-100'
+                      }`}
+                    >
+                      {opt.label}
+                      {isSelected && (
+                        <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      )}
+                    </button>
+                  )
+                })}
+              </div>
+            )}
           </div>
         </div>
 
