@@ -24,8 +24,20 @@ export default function ProductView({
   const total = product.price * quantity
 
   return (
-    <div className="bg-stone-900/90 backdrop-blur-2xl rounded-3xl border border-stone-800 p-8 md:p-12 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14 items-start">
-      <div className="flex flex-col gap-5">
+    <div className="bg-stone-900/90 backdrop-blur-2xl rounded-3xl border border-stone-800 p-8 md:p-12 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] flex flex-col md:grid md:grid-cols-2 gap-8 lg:gap-12 items-stretch md:items-start">
+      <div className="order-1 md:order-2 flex flex-col">
+        <div>
+          <span className="text-[10px] font-black text-white uppercase tracking-widest bg-orange-600 shadow-[0_0_15px_rgba(234,88,12,0.8)] px-3.5 py-1.5 rounded-full inline-block">
+            {product.category || 'General'}
+          </span>
+
+          <h1 className="text-3xl md:text-4xl font-black text-stone-100 tracking-tight mt-5">
+            {product.name}
+          </h1>
+        </div>
+      </div>
+
+      <div className="order-2 md:order-1 flex flex-col gap-5">
         <GalleryViewer images={images} productName={product.name} />
 
         <div className="grid grid-cols-3 gap-3">
@@ -42,29 +54,11 @@ export default function ProductView({
             </div>
           ))}
         </div>
-
-        <ProductActions
-          name={product.name}
-          price={product.price}
-          stock={product.stock}
-          hasColors={product.hasColors}
-          colors={product.colors}
-          quantity={quantity}
-          onQuantityChange={setQuantity}
-        />
       </div>
 
-      <div className="flex flex-col">
-        <div>
-          <span className="text-[10px] font-black text-white uppercase tracking-widest bg-orange-600 shadow-[0_0_15px_rgba(234,88,12,0.8)] px-3.5 py-1.5 rounded-full inline-block">
-            {product.category || 'General'}
-          </span>
-
-          <h1 className="text-3xl md:text-4xl font-black text-stone-100 tracking-tight mt-5">
-            {product.name}
-          </h1>
-
-          <div className="mt-4 flex items-baseline gap-2">
+      <div className="order-4 md:order-4 flex flex-col -mb-12 md:mb-0">
+        <div className="mt-0">
+          <div className="flex items-baseline gap-2">
             <span className="text-4xl font-black text-orange-400 tracking-tight">${total}</span>
             {product.oldPrice && product.oldPrice > product.price && (
               <span className="text-lg font-bold text-stone-500 line-through tracking-tight">
@@ -76,11 +70,25 @@ export default function ProductView({
               <span className="text-sm font-bold text-stone-500">({quantity} × ${product.price})</span>
             )}
           </div>
-
-          <div className="mt-8">
-            <DescriptionCard description={product.description} />
-          </div>
         </div>
+      </div>
+
+      <div className="order-3 md:order-6 flex flex-col">
+        <div className="mt-8">
+          <DescriptionCard description={product.description} />
+        </div>
+      </div>
+
+      <div className="order-5 md:order-3 flex flex-col">
+        <ProductActions
+          name={product.name}
+          price={product.price}
+          stock={product.stock}
+          hasColors={product.hasColors}
+          colors={product.colors}
+          quantity={quantity}
+          onQuantityChange={setQuantity}
+        />
       </div>
     </div>
   )

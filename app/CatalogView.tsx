@@ -3,9 +3,9 @@
 import { useState, useEffect, useRef, useMemo, memo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { urlFor } from '@/sanity/lib/image'
-import { SearchIcon, WhatsAppIcon, TruckIcon, LockIcon, CheckIcon } from './icons'
+import { SearchIcon, WhatsAppIcon, TruckIcon, LockIcon, CheckIcon, InstagramIcon } from './icons'
 import { Highlight } from '@/app/product/[id]/DescriptionCard'
 import { SITE } from './config'
 import type { Product } from './types'
@@ -37,9 +37,17 @@ const SORT_OPTIONS = [
 
 function ExpandableDescription({ text }: { text: string }) {
   return (
-    <p className="mt-2 text-stone-200 text-[11px] leading-relaxed font-normal text-center break-words line-clamp-3 md:line-clamp-4 h-[43px] md:h-[64px] overflow-hidden">
-      <Highlight text={text} />
-    </p>
+    <div className="mt-3 w-full">
+      <div className="flex items-center justify-center gap-1.5 mb-1.5">
+        <CheckIcon className="w-3 h-3 text-orange-400" />
+        <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-stone-500">Características</span>
+      </div>
+      <div className="flex items-center justify-center w-fit mx-auto max-w-full h-[52px] md:h-[62px]">
+        <p className="text-stone-300 text-[11px] md:text-[13px] leading-relaxed font-normal text-center break-words line-clamp-3">
+          <Highlight text={text} />
+        </p>
+      </div>
+    </div>
   )
 }
 
@@ -61,6 +69,7 @@ export default function CatalogView({
   initialSort?: string
 }) {
   const pathname = usePathname()
+  const router = useRouter()
 
   const validCategory = initialCategory && Object.keys(CATEGORY_GROUPS).includes(initialCategory)
     ? initialCategory
@@ -163,7 +172,7 @@ export default function CatalogView({
       <header className="sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div className={`rounded-b-2xl border-b border-stone-800/80 transition-all duration-300 ${scrolled ? 'bg-stone-950/90 backdrop-blur-xl shadow-[0_15px_40px_-15px_rgba(0,0,0,0.8)]' : 'bg-stone-950/80 backdrop-blur-xl'}`}>
-          <div className="px-3 pt-1 pb-0.5 md:h-16 md:px-6 md:py-3 flex flex-col md:flex-row items-center justify-between gap-0.5 md:gap-3 transition-all duration-300">
+          <div className="px-3 pt-1 pb-0.5 md:h-16 md:px-6 md:py-3 flex flex-col md:flex-row items-center justify-between gap-0.5 md:gap-3 transition-all duration-300 relative">
 
           <Link href="/" className="flex items-center gap-2 group shrink-0">
             <span className="text-lg md:text-2xl font-black tracking-tight text-stone-100 group-hover:text-orange-400 transition-colors">
@@ -171,7 +180,7 @@ export default function CatalogView({
             </span>
           </Link>
 
-          <nav className="flex items-center gap-0.5 md:gap-2 overflow-x-auto max-w-full md:pb-0 no-scrollbar relative z-10" role="tablist">
+          <nav className="flex items-center gap-0.5 md:gap-2 overflow-x-auto max-w-full md:pb-0 no-scrollbar relative z-10 md:pr-28" role="tablist">
             {categories.map((cat) => {
               const isActive = selectedCategory.toLowerCase() === cat.toLowerCase()
               return (
@@ -196,7 +205,7 @@ export default function CatalogView({
             })}
           </nav>
 
-          <div className={`grid transition-all duration-300 ease-out ${showFilters ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'} w-full md:w-auto`}>
+          <div className={`grid transition-all duration-300 ease-out ${showFilters ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'} w-full md:w-auto md:absolute md:right-4 md:top-1/2 md:-translate-y-1/2`}>
             <div className="relative overflow-hidden md:overflow-visible" ref={filtersRef}>
               <button
                 onClick={() => setFiltersOpen(!filtersOpen)}
@@ -204,14 +213,14 @@ export default function CatalogView({
                 aria-haspopup="menu"
                 aria-hidden={!showFilters}
                 tabIndex={showFilters ? 0 : -1}
-                className={`flex items-center gap-1.5 whitespace-nowrap w-full md:w-auto justify-center transition-all duration-300 ease-out ${
+                className={`flex items-center gap-1.5 whitespace-nowrap w-full md:w-auto justify-center transition-all duration-300 ease-out will-change-transform ${
                   showFilters
-                    ? `opacity-100 px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider ${
+                    ? `opacity-100 translate-y-0 px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider ${
                         activeFilter
                           ? 'bg-orange-600 text-white shadow-[0_0_15px_rgba(234,88,12,0.4)] border border-orange-400/50'
                           : 'bg-stone-900/50 text-stone-400 hover:text-stone-100 hover:bg-stone-800 border border-stone-800'
                       }`
-                    : 'opacity-0 px-4 py-0 border-transparent'
+                    : 'opacity-0 translate-y-2 px-4 py-0 border-transparent'
                 }`}
               >
                 <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -278,7 +287,7 @@ export default function CatalogView({
             href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent('Hola! Quiero consultar por un producto de Artigas Shop')}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white font-black py-3.5 px-7 rounded-xl transition-all duration-300 uppercase tracking-wider text-xs cursor-pointer hover:shadow-[0_0_25px_rgba(22,163,74,0.5)]"
+            className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white font-black py-3.5 px-7 rounded-xl transition-all duration-300 uppercase tracking-wider text-xs cursor-pointer hover:shadow-[0_0_25px_rgba(22,163,74,0.5)] hover:-translate-y-0.5 active:scale-95"
           >
             <WhatsAppIcon className="w-4 h-4" />
             Consultar por WhatsApp
@@ -420,7 +429,16 @@ export default function CatalogView({
                 <div
                   key={product._id}
                   style={{ animationDelay: `${Math.min(index, 9) * 25}ms` }}
-                  className="group relative min-w-0 bg-stone-900/80 backdrop-blur-sm rounded-2xl border border-stone-800 hover:border-orange-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_45px_-5px_rgba(234,88,12,0.45)] flex flex-col justify-between overflow-hidden animate-fade-up scale-[1.015]"
+                  onClick={() => router.push(`/product/${product._id}`)}
+                  role="link"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      router.push(`/product/${product._id}`)
+                    }
+                  }}
+                  className="group relative min-w-0 bg-stone-900/80 backdrop-blur-sm rounded-2xl border border-stone-800 hover:border-orange-500/40 hover:ring-1 hover:ring-orange-500/20 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_45px_-5px_rgba(234,88,12,0.35)] flex flex-col justify-between overflow-hidden animate-fade-up scale-[1.015] cursor-pointer"
                 >
                   <div className="relative p-3 pb-0 flex flex-col gap-3">
                     {product.oldPrice && product.oldPrice > product.price && (
@@ -444,6 +462,8 @@ export default function CatalogView({
                       ) : (
                         <div className="text-stone-500 text-xs font-mono">Sin Imagen</div>
                       )}
+                      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-stone-950/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <div className="absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[150%] group-hover:translate-x-[450%] transition-transform duration-[900ms] ease-out pointer-events-none" />
                     </div>
 
                     {typeof product.stock === 'number' && (
@@ -466,7 +486,7 @@ export default function CatalogView({
                   <div className="p-3 flex flex-col flex-grow relative z-10">
                     <h3 className="flex justify-center text-base font-black text-stone-100 group-hover:text-orange-400 transition-colors">
                       <span className="min-w-0 max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-left">
-                        {product.shortName || product.name}
+                        <Highlight text={product.shortName || product.name} />
                       </span>
                     </h3>
                     <MemoizedExpandableDescription
@@ -474,31 +494,21 @@ export default function CatalogView({
                     />
 
                     <div className="mt-auto pt-3 flex flex-col gap-2">
-                      <div className="flex items-end justify-between gap-2">
-                        <div className="flex flex-col">
-                          <div className="flex items-baseline gap-2">
-                            <span className="text-2xl font-black text-orange-400 tracking-tight">${product.price}</span>
-                            {product.oldPrice && product.oldPrice > product.price && (
-                              <span className="text-sm font-bold text-stone-500 line-through">${product.oldPrice}</span>
-                            )}
-                          </div>
-                        </div>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-2xl font-black text-orange-400 tracking-tight">${product.price}</span>
+                        {product.oldPrice && product.oldPrice > product.price && (
+                          <span className="text-sm font-bold text-stone-500 line-through">${product.oldPrice}</span>
+                        )}
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <Link
-                          href={`/product/${product._id}`}
-                          className="w-full inline-flex items-center justify-center px-4 py-2.5 text-xs font-bold text-white transition-all duration-300 bg-stone-950 border border-stone-700 rounded-xl hover:bg-orange-500 hover:border-orange-400 hover:text-stone-950 hover:shadow-[0_0_20px_rgba(234,88,12,0.6)] group-hover:bg-stone-800"
-                        >
-                          VER MÁS
-                        </Link>
-
                         <a
                           href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Hola! Me interesa "${(product.shortName || product.name).trim()}" a $${product.price} UY`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
                           aria-label={`Consultar ${product.shortName || product.name} por WhatsApp`}
-                          className="w-full inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white font-black py-2.5 px-4 rounded-xl transition-all duration-300 uppercase tracking-wider text-xs cursor-pointer"
+                          className="w-full inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white font-black py-2.5 px-4 rounded-xl transition-all duration-300 uppercase tracking-wider text-xs cursor-pointer hover:shadow-[0_0_20px_rgba(34,197,94,0.35)] hover:-translate-y-0.5 active:scale-95"
                         >
                           <WhatsAppIcon className="w-4 h-4" />
                           Consultar
@@ -516,13 +526,13 @@ export default function CatalogView({
       </div>
 
       <a
-        href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent('Hola! Quiero consultar por un producto de Artigas Shop')}`}
+        href={SITE.instagram}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Consultar por WhatsApp"
-        className="fixed bottom-5 right-5 z-50 flex items-center justify-center w-14 h-14 rounded-full bg-green-600 hover:bg-green-500 text-white shadow-[0_8px_30px_rgba(22,163,74,0.5)] transition-all duration-300 hover:scale-110 cursor-pointer"
+        aria-label="Seguinos en Instagram"
+        className="fixed bottom-5 right-5 z-50 flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-fuchsia-600 via-rose-500 to-amber-400 hover:from-fuchsia-500 hover:via-rose-400 hover:to-amber-300 text-white shadow-[0_8px_30px_rgba(217,70,239,0.4)] transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer"
       >
-        <WhatsAppIcon className="w-7 h-7" />
+        <InstagramIcon className="w-7 h-7" />
       </a>
     </main>
   )
