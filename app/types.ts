@@ -5,10 +5,13 @@ export interface Product {
   name: string
   shortName?: string
   price: number
+  oldPrice?: number
   description?: string
   shortDescription?: string
   category?: string
   stock?: number
+  hasColors?: boolean
+  colors?: string[]
   image: SanityImageSource
   images?: SanityImageSource[]
 }

@@ -192,17 +192,14 @@ export default function GalleryViewer({ images, productName }: { images: string[
       </div>
 
       {images.length > 1 && (
-        <div
-          className="grid gap-3"
-          style={{ gridTemplateColumns: `repeat(${images.length}, minmax(0, 1fr))` }}
-        >
+        <div className="flex gap-3">
           {images.map((img, index) => {
             const isActive = index === activeIndex
             return (
               <button
                 key={index}
                 onClick={() => setActiveIndex(index)}
-                className={`relative aspect-square bg-neutral-900 rounded-xl overflow-hidden cursor-pointer transition-all duration-200 border-2 ${
+                className={`relative flex-1 min-w-0 aspect-square max-w-20 md:max-w-24 bg-neutral-900 rounded-xl overflow-hidden cursor-pointer transition-all duration-200 border-2 ${
                   isActive
                     ? 'border-orange-400 shadow-[0_0_20px_rgba(234,88,12,0.5)] opacity-100'
                     : 'border-stone-700 opacity-60 hover:opacity-100 hover:border-stone-500'

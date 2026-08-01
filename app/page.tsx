@@ -17,6 +17,7 @@ async function getProducts(): Promise<Product[]> {
     name,
     shortName,
     price,
+    oldPrice,
     description,
     shortDescription,
     category,

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { SITE } from './config'
+import { WhatsAppIcon } from './icons'
 
 export default function Footer() {
   return (
@@ -13,6 +14,15 @@ export default function Footer() {
             <p className="text-stone-400 text-sm mt-3 leading-relaxed max-w-md">
               Tu tienda de confianza en Artigas. Productos seleccionados con los mejores precios.
             </p>
+            <a
+              href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent('Hola! Quiero consultar por un producto de Artigas Shop')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 mt-5 bg-green-600 hover:bg-green-500 text-white font-black py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer"
+            >
+              <WhatsAppIcon className="w-4 h-4" />
+              Escríbenos
+            </a>
           </div>
 
           <div>
@@ -28,6 +38,16 @@ export default function Footer() {
             <ul className="space-y-2 text-stone-400 text-sm">
               <li>{SITE.location}</li>
               <li>{SITE.email}</li>
+              <li>
+                <a
+                  href={`https://wa.me/${SITE.whatsapp}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-orange-400 transition-colors"
+                >
+                  WhatsApp: {SITE.whatsapp}
+                </a>
+              </li>
             </ul>
           </div>
         </div>
