@@ -37,7 +37,7 @@ const SORT_OPTIONS = [
 
 function ExpandableDescription({ text }: { text: string }) {
   return (
-    <p className="mt-2 text-stone-200 text-[13px] leading-relaxed font-normal text-center whitespace-pre-line line-clamp-3 bg-stone-800/40 border border-stone-700/40 rounded-xl px-3 py-2">
+    <p className="mt-2 text-stone-200 text-[13px] leading-relaxed font-normal text-center break-words line-clamp-3 h-[80px] bg-stone-800/40 border border-stone-700/40 rounded-xl px-3 py-2 overflow-hidden">
       <Highlight text={text} />
     </p>
   )
@@ -161,15 +161,15 @@ export default function CatalogView({
       <header className="sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div className={`rounded-b-2xl border-b border-stone-800/80 transition-all duration-300 ${scrolled ? 'bg-stone-950/90 backdrop-blur-xl shadow-[0_15px_40px_-15px_rgba(0,0,0,0.8)]' : 'bg-stone-950/80 backdrop-blur-xl'}`}>
-          <div className="px-6 py-3 md:h-16 flex flex-col md:flex-row items-center justify-between gap-3">
+          <div className="px-3 pt-1 pb-0.5 md:h-16 md:px-6 md:py-3 flex flex-col md:flex-row items-center justify-between gap-0.5 md:gap-3 transition-all duration-300">
 
           <Link href="/" className="flex items-center gap-2 group shrink-0">
-            <span className="text-2xl font-black tracking-tight text-stone-100 group-hover:text-orange-400 transition-colors">
+            <span className="text-lg md:text-2xl font-black tracking-tight text-stone-100 group-hover:text-orange-400 transition-colors">
               Artigas<span className="text-orange-500"> Shop</span>
             </span>
           </Link>
 
-          <nav className="flex items-center gap-1 md:gap-2 overflow-x-auto max-w-full pb-1 md:pb-0 no-scrollbar relative z-10" role="tablist">
+          <nav className="flex items-center gap-0.5 md:gap-2 overflow-x-auto max-w-full md:pb-0 no-scrollbar relative z-10" role="tablist">
             {categories.map((cat) => {
               const isActive = selectedCategory.toLowerCase() === cat.toLowerCase()
               return (
@@ -182,7 +182,7 @@ export default function CatalogView({
                   }}
                   role="tab"
                   aria-selected={isActive}
-                  className={`px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 whitespace-nowrap ${
+                  className={`px-2.5 py-0.5 md:px-3 md:py-2 rounded-lg text-[11px] md:text-xs font-bold uppercase tracking-wider transition-all duration-200 whitespace-nowrap ${
                     isActive
                       ? 'text-orange-400'
                       : 'text-stone-500 hover:text-stone-100'
@@ -194,28 +194,29 @@ export default function CatalogView({
             })}
           </nav>
 
-          <div className="relative" ref={filtersRef}>
-            <button
-              onClick={() => setFiltersOpen(!filtersOpen)}
-              aria-expanded={filtersOpen}
-              aria-haspopup="menu"
-              aria-hidden={!showFilters}
-              tabIndex={showFilters ? 0 : -1}
-              className={`flex items-center gap-1.5 whitespace-nowrap overflow-hidden transition-all duration-300 ease-out ${
-                showFilters
-                  ? `max-w-56 opacity-100 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider ${
-                      activeFilter
-                        ? 'bg-orange-600 text-white shadow-[0_0_15px_rgba(234,88,12,0.4)] border border-orange-400/50'
-                        : 'bg-stone-900/50 text-stone-400 hover:text-stone-100 hover:bg-stone-800 border border-stone-800'
-                    }`
-                  : 'max-w-0 opacity-0 px-0 py-0 border-transparent'
-              }`}
-            >
-              <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-              </svg>
-              <span className="shrink-0">{activeFilter || 'Filtros'}</span>
-            </button>
+          <div className={`grid transition-all duration-300 ease-out ${showFilters ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'} w-full md:w-auto`}>
+            <div className="relative overflow-hidden md:overflow-visible" ref={filtersRef}>
+              <button
+                onClick={() => setFiltersOpen(!filtersOpen)}
+                aria-expanded={filtersOpen}
+                aria-haspopup="menu"
+                aria-hidden={!showFilters}
+                tabIndex={showFilters ? 0 : -1}
+                className={`flex items-center gap-1.5 whitespace-nowrap w-full md:w-auto justify-center transition-all duration-300 ease-out ${
+                  showFilters
+                    ? `opacity-100 px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider ${
+                        activeFilter
+                          ? 'bg-orange-600 text-white shadow-[0_0_15px_rgba(234,88,12,0.4)] border border-orange-400/50'
+                          : 'bg-stone-900/50 text-stone-400 hover:text-stone-100 hover:bg-stone-800 border border-stone-800'
+                      }`
+                    : 'opacity-0 px-4 py-0 border-transparent'
+                }`}
+              >
+                <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                <span className="shrink-0">{activeFilter || 'Filtros'}</span>
+              </button>
 
               {filtersOpen && (
                 <div className="absolute top-full right-0 mt-2 w-52 bg-stone-900 border border-stone-700 rounded-xl shadow-2xl shadow-black/50 overflow-hidden z-50">
@@ -255,6 +256,7 @@ export default function CatalogView({
               )}
             </div>
           </div>
+        </div>
         </div>
         </div>
       </header>
@@ -416,7 +418,7 @@ export default function CatalogView({
                 <div
                   key={product._id}
                   style={{ animationDelay: `${Math.min(index, 9) * 25}ms` }}
-                  className="group relative bg-stone-900/80 backdrop-blur-sm rounded-2xl border border-stone-800 hover:border-orange-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_45px_-5px_rgba(234,88,12,0.45)] flex flex-col justify-between overflow-hidden animate-fade-up scale-[1.015]"
+                  className="group relative min-w-0 bg-stone-900/80 backdrop-blur-sm rounded-2xl border border-stone-800 hover:border-orange-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_45px_-5px_rgba(234,88,12,0.45)] flex flex-col justify-between overflow-hidden animate-fade-up scale-[1.015]"
                 >
                   <div className="relative p-3 pb-0 flex flex-col gap-3">
                     <div className="absolute top-1 left-2 z-10">
