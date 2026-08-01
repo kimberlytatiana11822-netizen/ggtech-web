@@ -37,7 +37,7 @@ const SORT_OPTIONS = [
 
 function ExpandableDescription({ text }: { text: string }) {
   return (
-    <p className="mt-2 text-stone-200 text-[13px] leading-relaxed font-normal text-center break-words line-clamp-2 md:line-clamp-3 h-[43px] md:h-[64px] overflow-hidden">
+    <p className="mt-2 text-stone-200 text-[11px] leading-relaxed font-normal text-center break-words line-clamp-3 md:line-clamp-4 h-[43px] md:h-[64px] overflow-hidden">
       <Highlight text={text} />
     </p>
   )
@@ -423,12 +423,6 @@ export default function CatalogView({
                   className="group relative min-w-0 bg-stone-900/80 backdrop-blur-sm rounded-2xl border border-stone-800 hover:border-orange-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_45px_-5px_rgba(234,88,12,0.45)] flex flex-col justify-between overflow-hidden animate-fade-up scale-[1.015]"
                 >
                   <div className="relative p-3 pb-0 flex flex-col gap-3">
-                    <div className="absolute top-1 left-2 z-10">
-                      <span className="text-[9px] font-black tracking-widest uppercase text-white bg-orange-600/90 shadow-[0_0_15px_rgba(234,88,12,0.8)] px-3 py-1.5 rounded-full backdrop-blur-md">
-                        {product.category || 'General'}
-                      </span>
-                    </div>
-
                     {product.oldPrice && product.oldPrice > product.price && (
                       <div className="absolute top-9 left-2 z-10">
                         <span className="text-[9px] font-black tracking-widest uppercase text-white bg-red-600/90 shadow-[0_0_15px_rgba(220,38,38,0.8)] px-3 py-1.5 rounded-full backdrop-blur-md">
