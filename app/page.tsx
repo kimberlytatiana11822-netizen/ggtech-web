@@ -21,8 +21,11 @@ async function getProducts(): Promise<Product[]> {
     description,
     shortDescription,
     category,
+    stock,
+    hasColors,
+    colors,
     image,
-    images
+    "mainImage": images[0]
   }`
   return await client.fetch(query)
 }

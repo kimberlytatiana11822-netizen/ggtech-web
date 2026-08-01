@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -35,27 +35,9 @@ const SORT_OPTIONS = [
   { value: 'price-desc', label: 'Precio: mayor a menor' },
 ] as const
 
-const COLOR_SWATCHES: Record<string, string> = {
-  blanco: '#f5f5f4',
-  negro: '#1c1917',
-  gris: '#78716c',
-  rojo: '#dc2626',
-  rosa: '#ec4899',
-  celeste: '#38bdf8',
-  azul: '#2563eb',
-  verde: '#22c55e',
-  amarillo: '#eab308',
-  lila: '#a78bfa',
-  naranja: '#f97316',
-  marron: '#92400e',
-  bordo: '#7f1d1d',
-  dorado: '#d4af37',
-  plateado: '#cbd5e1',
-}
-
 function ExpandableDescription({ text }: { text: string }) {
   return (
-    <p className="mt-1.5 text-stone-400 text-xs leading-relaxed font-light text-left whitespace-pre-line">
+    <p className="mt-2 text-stone-200 text-[13px] leading-relaxed font-normal text-center whitespace-pre-line line-clamp-3 bg-stone-800/40 border border-stone-700/40 rounded-xl px-3 py-2">
       <Highlight text={text} />
     </p>
   )
@@ -135,7 +117,10 @@ export default function CatalogView({
   }
 
   const categories = ['Todos', ...Object.keys(CATEGORY_GROUPS)]
-  const categoryFilters = CATEGORY_FILTERS[selectedCategory] ?? []
+  const categoryFilters = useMemo(
+    () => CATEGORY_FILTERS[selectedCategory] ?? [],
+    [selectedCategory]
+  )
   const showFilters = selectedCategory !== 'Todos' && categoryFilters.length > 0
 
   const searchableText = (p: Product) =>
@@ -144,23 +129,25 @@ export default function CatalogView({
       .join(' ')
       .toLowerCase()
 
-  const filteredProducts = initialProducts.filter((p) => {
-    const cat = p.category?.toLowerCase() || ''
-    const matchesCategory =
-      selectedCategory === 'Todos' ||
-      (CATEGORY_GROUPS[selectedCategory] ?? []).includes(cat)
-    const matchesSearch = !searchQuery ||
-      searchQuery
-        .toLowerCase()
-        .split(/\s+/)
-        .every((word) => searchableText(p).includes(word))
-    const filterDef = categoryFilters.find(f => f.label === activeFilter)
-    const matchesFilter = !activeFilter || !filterDef || matchesQuickFilter(p, filterDef)
-    return matchesCategory && matchesSearch && matchesFilter
-  })
-
-  if (sortBy === 'price-asc') filteredProducts.sort((a, b) => a.price - b.price)
-  if (sortBy === 'price-desc') filteredProducts.sort((a, b) => b.price - a.price)
+  const filteredProducts = useMemo(() => {
+    const matches = initialProducts.filter((p) => {
+      const cat = p.category?.toLowerCase() || ''
+      const matchesCategory =
+        selectedCategory === 'Todos' ||
+        (CATEGORY_GROUPS[selectedCategory] ?? []).includes(cat)
+      const matchesSearch = !searchQuery ||
+        searchQuery
+          .toLowerCase()
+          .split(/\s+/)
+          .every((word) => searchableText(p).includes(word))
+      const filterDef = categoryFilters.find(f => f.label === activeFilter)
+      const matchesFilter = !activeFilter || !filterDef || matchesQuickFilter(p, filterDef)
+      return matchesCategory && matchesSearch && matchesFilter
+    })
+    if (sortBy === 'price-asc') matches.sort((a, b) => a.price - b.price)
+    if (sortBy === 'price-desc') matches.sort((a, b) => b.price - a.price)
+    return matches
+  }, [initialProducts, selectedCategory, searchQuery, activeFilter, categoryFilters, sortBy])
 
   const filterSignature = `${selectedCategory}|${activeFilter}|${sortBy}`
 
@@ -423,41 +410,25 @@ export default function CatalogView({
         ) : (
           <div key={filterSignature} className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {filteredProducts.map((product, index) => {
-              const mainImg = product.image || (product.images && product.images[0])
+              const mainImg = product.image || product.mainImage
 
               return (
                 <div
                   key={product._id}
-                  style={{ animationDelay: `${Math.min(index, 9) * 40}ms` }}
+                  style={{ animationDelay: `${Math.min(index, 9) * 25}ms` }}
                   className="group relative bg-stone-900/80 backdrop-blur-sm rounded-2xl border border-stone-800 hover:border-orange-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_45px_-5px_rgba(234,88,12,0.45)] flex flex-col justify-between overflow-hidden animate-fade-up scale-[1.015]"
                 >
-                  <div className="p-3 pb-0 flex flex-col gap-3">
-                    <div className="absolute top-4 left-4 z-10">
+                  <div className="relative p-3 pb-0 flex flex-col gap-3">
+                    <div className="absolute top-1 left-2 z-10">
                       <span className="text-[9px] font-black tracking-widest uppercase text-white bg-orange-600/90 shadow-[0_0_15px_rgba(234,88,12,0.8)] px-3 py-1.5 rounded-full backdrop-blur-md">
                         {product.category || 'General'}
                       </span>
                     </div>
 
                     {product.oldPrice && product.oldPrice > product.price && (
-                      <div className="absolute top-12 left-4 z-10">
+                      <div className="absolute top-9 left-2 z-10">
                         <span className="text-[9px] font-black tracking-widest uppercase text-white bg-red-600/90 shadow-[0_0_15px_rgba(220,38,38,0.8)] px-3 py-1.5 rounded-full backdrop-blur-md">
                           OFERTA -{Math.round((1 - product.price / product.oldPrice) * 100)}%
-                        </span>
-                      </div>
-                    )}
-
-                    {typeof product.stock === 'number' && product.stock > 0 && (
-                      <div className="absolute top-4 right-4 z-10">
-                        <span className="text-[9px] font-black tracking-widest uppercase text-green-500 bg-green-500/15 border border-green-500/40 shadow-[0_0_15px_rgba(34,197,94,0.3)] px-3 py-1.5 rounded-full backdrop-blur-md">
-                          Disponible
-                        </span>
-                      </div>
-                    )}
-
-                    {typeof product.stock === 'number' && product.stock <= 0 && (
-                      <div className="absolute top-4 right-4 z-10">
-                        <span className="text-[9px] font-black tracking-widest uppercase text-white bg-red-600/90 shadow-[0_0_15px_rgba(220,38,38,0.8)] px-3 py-1.5 rounded-full backdrop-blur-md">
-                          Sin stock
                         </span>
                       </div>
                     )}
@@ -476,9 +447,25 @@ export default function CatalogView({
                         <div className="text-stone-500 text-xs font-mono">Sin Imagen</div>
                       )}
                     </div>
+
+                    {typeof product.stock === 'number' && (
+                      <div className="absolute -bottom-2 right-2 z-10">
+                        {product.stock > 0 ? (
+                          <span className="inline-flex items-center gap-1 text-[8px] font-black tracking-widest uppercase text-white bg-green-600/95 shadow-[0_0_12px_rgba(34,197,94,0.4)] px-2 py-1 rounded-full backdrop-blur-md">
+                            <span className="w-1 h-1 rounded-full bg-white animate-pulse" />
+                            Disponible
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-[8px] font-black tracking-widest uppercase text-white bg-red-600/95 shadow-[0_0_12px_rgba(220,38,38,0.6)] px-2 py-1 rounded-full backdrop-blur-md">
+                            <span className="w-1 h-1 rounded-full bg-white/80" />
+                            Sin stock
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
 
-                  <div className="p-4 flex flex-col flex-grow relative z-10">
+                  <div className="p-3 flex flex-col flex-grow relative z-10">
                     <h3 className="flex justify-center text-base font-black text-stone-100 group-hover:text-orange-400 transition-colors">
                       <span className="min-w-0 max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-left">
                         {product.shortName || product.name}
@@ -488,26 +475,9 @@ export default function CatalogView({
                       text={product.shortDescription || product.description || 'Sin descripción disponible.'}
                     />
 
-                    {product.hasColors && product.colors && product.colors.length > 0 && (
-                      <div className="mt-3 flex items-center gap-1.5">
-                        {product.colors.map((c) => (
-                          <span
-                            key={c}
-                            title={c}
-                            className="w-4 h-4 rounded-full border border-stone-600 shrink-0"
-                            style={{ background: COLOR_SWATCHES[c] ?? '#a8a29e' }}
-                          />
-                        ))}
-                        <span className="text-[10px] text-stone-500 uppercase tracking-wider font-bold ml-1">
-                          {product.colors.length} {product.colors.length === 1 ? 'color' : 'colores'}
-                        </span>
-                      </div>
-                    )}
-
-                    <div className="mt-auto pt-4 flex flex-col gap-2.5">
-                      <div className="flex items-end justify-between">
+                    <div className="mt-auto pt-3 flex flex-col gap-2">
+                      <div className="flex items-end justify-between gap-2">
                         <div className="flex flex-col">
-                          <span className="text-[10px] text-orange-500/80 uppercase tracking-widest font-bold mb-1">Precio</span>
                           <div className="flex items-baseline gap-2">
                             <span className="text-2xl font-black text-orange-400 tracking-tight">${product.price}</span>
                             {product.oldPrice && product.oldPrice > product.price && (
@@ -517,10 +487,10 @@ export default function CatalogView({
                         </div>
                       </div>
 
-                      <div className="flex flex-col gap-2">
+                      <div className="flex flex-col gap-1.5">
                         <Link
                           href={`/product/${product._id}`}
-                          className="w-full inline-flex items-center justify-center px-4 py-3 text-xs font-bold text-white transition-all duration-300 bg-stone-950 border border-stone-700 rounded-xl hover:bg-orange-500 hover:border-orange-400 hover:text-stone-950 hover:shadow-[0_0_20px_rgba(234,88,12,0.6)] group-hover:bg-stone-800"
+                          className="w-full inline-flex items-center justify-center px-4 py-2.5 text-xs font-bold text-white transition-all duration-300 bg-stone-950 border border-stone-700 rounded-xl hover:bg-orange-500 hover:border-orange-400 hover:text-stone-950 hover:shadow-[0_0_20px_rgba(234,88,12,0.6)] group-hover:bg-stone-800"
                         >
                           VER MÁS
                         </Link>
@@ -530,7 +500,7 @@ export default function CatalogView({
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label={`Consultar ${product.shortName || product.name} por WhatsApp`}
-                          className="w-full inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white font-black py-3 px-4 rounded-xl transition-all duration-300 uppercase tracking-wider text-xs cursor-pointer"
+                          className="w-full inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white font-black py-2.5 px-4 rounded-xl transition-all duration-300 uppercase tracking-wider text-xs cursor-pointer"
                         >
                           <WhatsAppIcon className="w-4 h-4" />
                           Consultar

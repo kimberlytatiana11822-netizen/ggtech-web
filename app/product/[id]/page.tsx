@@ -41,7 +41,7 @@ async function getRelatedProducts(product: Product): Promise<Product[]> {
     shortDescription,
     category,
     image,
-    images
+    "mainImage": images[0]
   }`
   return await client.fetch(query, { category: product.category, id: product._id })
 }
@@ -135,7 +135,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((rp) => {
-                const rpImg = rp.image || (rp.images && rp.images[0])
+                const rpImg = rp.image || rp.mainImage
                 return (
                   <Link
                     key={rp._id}

@@ -13,5 +13,6 @@ export interface Product {
   hasColors?: boolean
   colors?: string[]
   image: SanityImageSource
+  mainImage?: SanityImageSource
   images?: SanityImageSource[]
 }
