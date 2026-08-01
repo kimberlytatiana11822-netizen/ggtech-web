@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo, memo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -37,11 +37,13 @@ const SORT_OPTIONS = [
 
 function ExpandableDescription({ text }: { text: string }) {
   return (
-    <p className="mt-2 text-stone-200 text-[13px] leading-relaxed font-normal text-center break-words line-clamp-3 h-[80px] bg-stone-800/40 border border-stone-700/40 rounded-xl px-3 py-2 overflow-hidden">
+    <p className="mt-2 text-stone-200 text-[13px] leading-relaxed font-normal text-center break-words line-clamp-2 md:line-clamp-3 h-[43px] md:h-[64px] overflow-hidden">
       <Highlight text={text} />
     </p>
   )
 }
+
+const MemoizedExpandableDescription = memo(ExpandableDescription)
 
 type SortValue = typeof SORT_OPTIONS[number]['value']
 
@@ -473,7 +475,7 @@ export default function CatalogView({
                         {product.shortName || product.name}
                       </span>
                     </h3>
-                    <ExpandableDescription
+                    <MemoizedExpandableDescription
                       text={product.shortDescription || product.description || 'Sin descripción disponible.'}
                     />
 

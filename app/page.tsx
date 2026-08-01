@@ -1,4 +1,5 @@
 import { client } from '@/sanity/lib/client'
+import { cache } from 'react'
 import CatalogView from './CatalogView'
 import type { Product } from './types'
 
@@ -22,13 +23,13 @@ async function getProducts(): Promise<Product[]> {
     shortDescription,
     category,
     stock,
-    hasColors,
-    colors,
     image,
     "mainImage": images[0]
   }`
   return await client.fetch(query)
 }
+
+const cachedGetProducts = cache(getProducts)
 
 export default async function Home({
   searchParams,
@@ -36,7 +37,7 @@ export default async function Home({
   searchParams: Promise<SearchParams>
 }) {
   const params = await searchParams
-  const products = await getProducts()
+  const products = await cachedGetProducts()
 
   return (
     <CatalogView
