@@ -28,12 +28,16 @@ export default function ProductActions({
   stock,
   hasColors,
   colors,
+  quantity,
+  onQuantityChange,
 }: {
   name: string
   price: number
   stock?: number
   hasColors?: boolean
   colors?: string[]
+  quantity: number
+  onQuantityChange: (q: number) => void
 }) {
   const [copied, setCopied] = useState(false)
   const [selectedColor, setSelectedColor] = useState<string | null>(null)
@@ -56,9 +60,12 @@ export default function ProductActions({
     }
   }, [colorOpen])
 
-  const productText = canPickColor && selectedColor
-    ? `Hola! Me interesa "${name.trim()}" color ${selectedColor} a $${price} UY`
-    : `Hola! Me interesa "${name.trim()}" a $${price} UY`
+  const maxQty = stock && stock > 0 ? Math.max(1, stock) : 99
+  const colorPart = canPickColor && selectedColor ? ` color ${selectedColor}` : ''
+  const qtyPart = quantity > 1 ? ` x${quantity}` : ''
+  const total = price * quantity
+
+  const productText = `Hola! Me interesa "${name.trim()}"${colorPart}${qtyPart} a $${total} UY`
 
   const handleWhatsApp = () => {
     if (canPickColor && !selectedColor) {
@@ -155,6 +162,29 @@ export default function ProductActions({
         <p className="text-xs text-red-400 font-bold">Elegí un color para consultar</p>
       )}
 
+      <div className="flex items-center justify-between gap-3 bg-stone-900/80 border border-stone-700 rounded-xl px-4 py-3">
+        <span className="text-xs font-bold uppercase tracking-wider text-stone-400">Cantidad</span>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
+            disabled={quantity <= 1}
+            aria-label="Disminuir cantidad"
+            className="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-100 font-black text-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          >
+            −
+          </button>
+          <span className="w-8 text-center text-lg font-black text-stone-100">{quantity}</span>
+          <button
+            onClick={() => onQuantityChange(Math.min(maxQty, quantity + 1))}
+            disabled={quantity >= maxQty}
+            aria-label="Aumentar cantidad"
+            className="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-100 font-black text-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          >
+            +
+          </button>
+        </div>
+      </div>
+
       <div className="flex items-center gap-3">
         <button
           onClick={handleWhatsApp}
@@ -170,10 +200,12 @@ export default function ProductActions({
           {copied ? '✓' : <ShareIcon className="w-5 h-5" />}
         </button>
       </div>
-      <div className="flex items-center gap-2 text-xs">
-        <span className={`w-2 h-2 rounded-full ${stock && stock > 0 ? 'bg-green-500' : 'bg-red-500'}`} />
-        <span className="text-stone-400 font-bold uppercase tracking-wider">
-          {stock && stock > 0 ? `Quedan ${stock}` : 'Sin stock'}
+      <div className="flex items-center gap-2">
+        <span className={`inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full ${
+          stock && stock > 0 ? 'bg-green-500/15 text-green-400 border border-green-500/30' : 'bg-red-500/15 text-red-400 border border-red-500/30'
+        }`}>
+          <span className={`w-1.5 h-1.5 rounded-full ${stock && stock > 0 ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
+          {stock && stock > 0 ? `Disponible · Quedan ${stock}` : 'Sin stock'}
         </span>
       </div>
     </div>

@@ -54,23 +54,10 @@ const COLOR_SWATCHES: Record<string, string> = {
 }
 
 function ExpandableDescription({ text }: { text: string }) {
-  const [expanded, setExpanded] = useState(false)
-  const isLong = text.length > 90
-
   return (
-    <div className="mt-1.5">
-      <p className={`text-stone-400 text-xs leading-relaxed font-light text-left whitespace-pre-line ${!expanded && isLong ? 'line-clamp-2' : ''}`}>
-        <Highlight text={text} />
-      </p>
-      {isLong && (
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="mt-1 text-[10px] font-bold text-white uppercase tracking-wider hover:text-orange-400 transition-colors cursor-pointer"
-        >
-          {expanded ? 'ver menos' : 'ver más'}
-        </button>
-      )}
-    </div>
+    <p className="mt-1.5 text-stone-400 text-xs leading-relaxed font-light text-left whitespace-pre-line">
+      <Highlight text={text} />
+    </p>
   )
 }
 
@@ -184,14 +171,15 @@ export default function CatalogView({
 
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(rgba(120,113,108,0.12)_1px,transparent_1px)] [background-size:24px_24px]" />
 
-      <header className={`sticky top-0 z-50 border-b transition-all duration-300 ${scrolled ? 'bg-stone-950/95 backdrop-blur-xl shadow-[0_10px_40px_-15px_rgba(234,88,12,0.2)]' : 'bg-stone-950/80 backdrop-blur-xl'} border-stone-800/80`}>
-        <div className="max-w-7xl mx-auto px-6 py-4 md:h-20 flex flex-col md:flex-row items-center justify-between gap-4">
+      <header className="sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
+        <div className={`rounded-b-2xl border-b border-stone-800/80 transition-all duration-300 ${scrolled ? 'bg-stone-950/90 backdrop-blur-xl shadow-[0_15px_40px_-15px_rgba(0,0,0,0.8)]' : 'bg-stone-950/80 backdrop-blur-xl'}`}>
+          <div className="px-6 py-3 md:h-16 flex flex-col md:flex-row items-center justify-between gap-3">
 
           <Link href="/" className="flex items-center gap-2 group shrink-0">
             <span className="text-2xl font-black tracking-tight text-stone-100 group-hover:text-orange-400 transition-colors">
               Artigas<span className="text-orange-500"> Shop</span>
             </span>
-            <span className="w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(234,88,12,0.9)] animate-pulse" />
           </Link>
 
           <nav className="flex items-center gap-1 md:gap-2 overflow-x-auto max-w-full pb-1 md:pb-0 no-scrollbar relative z-10" role="tablist">
@@ -207,18 +195,13 @@ export default function CatalogView({
                   }}
                   role="tab"
                   aria-selected={isActive}
-                  className={`relative px-3 md:px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 whitespace-nowrap ${
+                  className={`px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 whitespace-nowrap ${
                     isActive
-                      ? 'text-orange-400 bg-orange-500/10'
-                      : 'text-stone-400 hover:text-stone-100 hover:bg-stone-900/60'
+                      ? 'text-orange-400'
+                      : 'text-stone-500 hover:text-stone-100'
                   }`}
                 >
                   {cat}
-                  <span
-                    className={`absolute left-3 right-3 md:left-4 md:right-4 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-orange-600 to-amber-400 shadow-[0_0_12px_rgba(234,88,12,0.8)] transition-all duration-300 origin-left ${
-                      isActive ? 'scale-x-100' : 'scale-x-0'
-                    }`}
-                  />
                 </button>
               )
             })}
@@ -284,8 +267,9 @@ export default function CatalogView({
                 </div>
               )}
             </div>
+          </div>
         </div>
-        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange-600/60 to-transparent" />
+        </div>
       </header>
 
       <section className="max-w-7xl mx-auto px-6 pt-14 md:pt-20 pb-8 relative z-10 text-center">
@@ -458,6 +442,14 @@ export default function CatalogView({
                       <div className="absolute top-12 left-4 z-10">
                         <span className="text-[9px] font-black tracking-widest uppercase text-white bg-red-600/90 shadow-[0_0_15px_rgba(220,38,38,0.8)] px-3 py-1.5 rounded-full backdrop-blur-md">
                           OFERTA -{Math.round((1 - product.price / product.oldPrice) * 100)}%
+                        </span>
+                      </div>
+                    )}
+
+                    {typeof product.stock === 'number' && product.stock > 0 && (
+                      <div className="absolute top-4 right-4 z-10">
+                        <span className="text-[9px] font-black tracking-widest uppercase text-green-500 bg-green-500/15 border border-green-500/40 shadow-[0_0_15px_rgba(34,197,94,0.3)] px-3 py-1.5 rounded-full backdrop-blur-md">
+                          Disponible
                         </span>
                       </div>
                     )}
