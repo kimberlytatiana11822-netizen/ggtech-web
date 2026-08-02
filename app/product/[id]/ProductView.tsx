@@ -80,7 +80,7 @@ export default function ProductView({
           key={item.label}
           className="flex flex-col items-center text-center gap-1 bg-stone-800/50 border border-stone-800 rounded-2xl py-4 px-2 hover:border-orange-500/30 transition-colors"
         >
-          <span className="text-xl text-orange-400" aria-hidden="true">
+          <span className="text-xl text-sky-400" aria-hidden="true">
             <item.icon className="w-6 h-6" />
           </span>
           <span className="text-[11px] font-bold text-stone-100 uppercase tracking-wider">{item.label}</span>
