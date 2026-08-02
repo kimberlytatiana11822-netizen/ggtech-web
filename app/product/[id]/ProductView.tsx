@@ -21,7 +21,22 @@ export default function ProductView({
   images: string[]
 }) {
   const [quantity, setQuantity] = useState(1)
-  const total = product.price * quantity
+  const [selectedColors, setSelectedColors] = useState<string[]>([])
+  const [colorQty, setColorQty] = useState<Record<string, number>>({})
+
+  const hasColors = !!product.hasColors && !!product.colors && product.colors.length > 0
+  const totalUnits = hasColors
+    ? selectedColors.reduce((acc, c) => acc + (colorQty[c] ?? 1), 0)
+    : quantity
+  const total = product.price * totalUnits
+
+  const toggleColor = (c: string) => {
+    setSelectedColors((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]))
+  }
+
+  const changeColorQty = (c: string, q: number) => {
+    setColorQty((prev) => ({ ...prev, [c]: q }))
+  }
 
   const titleBlock = (
     <div>
@@ -40,12 +55,12 @@ export default function ProductView({
       <span className="text-4xl font-black text-orange-400 tracking-tight">${total}</span>
       {product.oldPrice && product.oldPrice > product.price && (
         <span className="text-lg font-bold text-stone-500 line-through tracking-tight">
-          ${product.oldPrice * quantity}
+          ${product.oldPrice * totalUnits}
         </span>
       )}
       <span className="text-xs font-bold text-stone-500 uppercase tracking-widest">UY</span>
-      {quantity > 1 && (
-        <span className="text-sm font-bold text-stone-500">({quantity} × ${product.price})</span>
+      {totalUnits > 1 && (
+        <span className="text-sm font-bold text-stone-500">({totalUnits} × ${product.price})</span>
       )}
     </div>
   )
@@ -76,6 +91,11 @@ export default function ProductView({
       colors={product.colors}
       quantity={quantity}
       onQuantityChange={setQuantity}
+      selectedColors={selectedColors}
+      onToggleColor={toggleColor}
+      colorQty={colorQty}
+      onColorQtyChange={changeColorQty}
+      totalUnits={totalUnits}
     />
   )
 

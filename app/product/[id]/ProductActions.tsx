@@ -30,6 +30,11 @@ export default function ProductActions({
   colors,
   quantity,
   onQuantityChange,
+  selectedColors,
+  onToggleColor,
+  colorQty,
+  onColorQtyChange,
+  totalUnits,
 }: {
   name: string
   price: number
@@ -38,14 +43,31 @@ export default function ProductActions({
   colors?: string[]
   quantity: number
   onQuantityChange: (q: number) => void
+  selectedColors: string[]
+  onToggleColor: (c: string) => void
+  colorQty: Record<string, number>
+  onColorQtyChange: (c: string, q: number) => void
+  totalUnits: number
 }) {
   const [copied, setCopied] = useState(false)
-  const [selectedColors, setSelectedColors] = useState<string[]>([])
   const [colorOpen, setColorOpen] = useState(false)
   const [colorWarning, setColorWarning] = useState(false)
   const colorRef = useRef<HTMLDivElement>(null)
 
   const canPickColor = hasColors && !!colors && colors.length > 0
+  const maxQty = stock && stock > 0 ? Math.max(1, stock) : 99
+  const atMaxStock = stock && stock > 0 ? totalUnits >= maxQty : false
+  const total = price * totalUnits
+
+  const qtyOf = (c: string) => colorQty[c] ?? 1
+
+  const colorPart =
+    canPickColor && selectedColors.length > 0
+      ? selectedColors.map((c) => `color ${c} x${qtyOf(c)}`).join(', ')
+      : ''
+  const qtyPart = !canPickColor && quantity > 1 ? ` x${quantity}` : ''
+
+  const productText = `Hola! Me interesa "${name.trim()}"${colorPart ? ` ${colorPart}` : ''}${qtyPart} a $${total} UY`
 
   useEffect(() => {
     if (!colorOpen) return
@@ -59,18 +81,6 @@ export default function ProductActions({
       document.removeEventListener('touchstart', handleClick)
     }
   }, [colorOpen])
-
-  const maxQty = stock && stock > 0 ? Math.max(1, stock) : 99
-  const colorPart =
-    canPickColor && selectedColors.length > 0
-      ? selectedColors.length === 1
-        ? ` color ${selectedColors[0]}`
-        : ` colores ${selectedColors.join(' y ')}`
-      : ''
-  const qtyPart = quantity > 1 ? ` x${quantity}` : ''
-  const total = price * quantity
-
-  const productText = `Hola! Me interesa "${name.trim()}"${colorPart}${qtyPart} a $${total} UY`
 
   const handleWhatsApp = () => {
     if (canPickColor && selectedColors.length === 0) {
@@ -149,9 +159,7 @@ export default function ProductActions({
                     role="option"
                     aria-selected={isSelected}
                     onClick={() => {
-                      setSelectedColors((prev) =>
-                        isSelected ? prev.filter((x) => x !== c) : [...prev, c]
-                      )
+                      onToggleColor(c)
                       setColorWarning(false)
                     }}
                     className={`w-full flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${
@@ -178,28 +186,78 @@ export default function ProductActions({
         <p className="text-xs text-red-400 font-bold">Elegí al menos un color para consultar</p>
       )}
 
-      <div className="flex items-center justify-between gap-3 bg-stone-900/80 border border-stone-700 rounded-xl px-4 py-3">
-        <span className="text-xs font-bold uppercase tracking-wider text-stone-400">Cantidad</span>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
-            disabled={quantity <= 1}
-            aria-label="Disminuir cantidad"
-            className="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-100 font-black text-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-          >
-            −
-          </button>
-          <span className="w-8 text-center text-lg font-black text-stone-100">{quantity}</span>
-          <button
-            onClick={() => onQuantityChange(Math.min(maxQty, quantity + 1))}
-            disabled={quantity >= maxQty}
-            aria-label="Aumentar cantidad"
-            className="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-100 font-black text-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-          >
-            +
-          </button>
+      {canPickColor && selectedColors.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between px-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-stone-400">Cantidad por color</span>
+            <span className="text-xs font-bold text-stone-500">
+              Total: {totalUnits}
+              {atMaxStock ? ` · máx ${maxQty}` : ''}
+            </span>
+          </div>
+          {selectedColors.map((c) => {
+            const q = qtyOf(c)
+            return (
+              <div
+                key={c}
+                className="flex items-center justify-between gap-3 bg-stone-900/80 border border-stone-700 rounded-xl px-4 py-3"
+              >
+                <span className="flex items-center gap-2 min-w-0">
+                  <span
+                    className="w-3.5 h-3.5 rounded-full border border-stone-600 shrink-0"
+                    style={{ background: COLOR_SWATCHES[c] ?? '#a8a29e' }}
+                  />
+                  <span className="text-sm font-bold text-stone-100 truncate">{c}</span>
+                </span>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => onColorQtyChange(c, Math.max(1, q - 1))}
+                    disabled={q <= 1}
+                    aria-label={`Disminuir cantidad de ${c}`}
+                    className="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-100 font-black text-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    −
+                  </button>
+                  <span className="w-8 text-center text-lg font-black text-stone-100">{q}</span>
+                  <button
+                    onClick={() => onColorQtyChange(c, Math.min(maxQty, q + 1))}
+                    disabled={atMaxStock}
+                    aria-label={`Aumentar cantidad de ${c}`}
+                    className="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-100 font-black text-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            )
+          })}
         </div>
-      </div>
+      )}
+
+      {!canPickColor && (
+        <div className="flex items-center justify-between gap-3 bg-stone-900/80 border border-stone-700 rounded-xl px-4 py-3">
+          <span className="text-xs font-bold uppercase tracking-wider text-stone-400">Cantidad</span>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
+              disabled={quantity <= 1}
+              aria-label="Disminuir cantidad"
+              className="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-100 font-black text-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+            >
+              −
+            </button>
+            <span className="w-8 text-center text-lg font-black text-stone-100">{quantity}</span>
+            <button
+              onClick={() => onQuantityChange(Math.min(maxQty, quantity + 1))}
+              disabled={quantity >= maxQty}
+              aria-label="Aumentar cantidad"
+              className="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-100 font-black text-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+            >
+              +
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="flex items-center gap-3">
         <button
