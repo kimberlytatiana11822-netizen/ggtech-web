@@ -63,7 +63,7 @@ export default function ProductActions({
 
   const colorPart =
     canPickColor && selectedColors.length > 0
-      ? selectedColors.map((c) => `color ${c} x${qtyOf(c)}`).join(', ')
+      ? selectedColors.filter((c) => qtyOf(c) > 0).map((c) => `color ${c} x${qtyOf(c)}`).join(', ')
       : ''
   const qtyPart = !canPickColor && quantity > 1 ? ` x${quantity}` : ''
 

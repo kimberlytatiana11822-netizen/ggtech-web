@@ -31,7 +31,15 @@ export default function ProductView({
   const total = product.price * totalUnits
 
   const toggleColor = (c: string) => {
-    setSelectedColors((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]))
+    if (selectedColors.includes(c)) {
+      setSelectedColors((prev) => prev.filter((x) => x !== c))
+      return
+    }
+    const stockLimit = product.stock && product.stock > 0 ? product.stock : Infinity
+    const currentTotal = selectedColors.reduce((a, x) => a + (colorQty[x] ?? 1), 0)
+    const remaining = Number.isFinite(stockLimit) ? Math.max(0, stockLimit - currentTotal) : 1
+    setColorQty((q) => ({ ...q, [c]: Math.min(1, remaining) }))
+    setSelectedColors((prev) => [...prev, c])
   }
 
   const changeColorQty = (c: string, q: number) => {
