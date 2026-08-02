@@ -48,7 +48,7 @@ export default function ProductView({
 
   const titleBlock = (
     <div>
-      <span className="text-[10px] font-black text-white uppercase tracking-widest bg-orange-600 shadow-[0_0_15px_rgba(234,88,12,0.8)] px-3.5 py-1.5 rounded-full inline-block">
+      <span className="text-[10px] font-black text-white uppercase tracking-widest bg-red-600 shadow-[0_0_15px_rgba(220,38,38,0.8)] px-3.5 py-1.5 rounded-full inline-block">
         {product.category || 'General'}
       </span>
 
