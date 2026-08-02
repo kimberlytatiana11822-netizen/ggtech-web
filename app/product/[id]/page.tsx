@@ -131,7 +131,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         {relatedProducts.length > 0 && (
           <div className="mt-16">
             <h2 className="text-2xl font-black tracking-tight text-stone-100 mb-8">
-              También te puede <span className="text-orange-400">interesar</span>
+              También te puede <span className="text-sky-400">interesar</span>
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((rp) => {
@@ -140,7 +140,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                   <Link
                     key={rp._id}
                     href={`/product/${rp._id}`}
-                    className="group bg-stone-900/80 backdrop-blur-sm rounded-2xl border border-stone-800 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_40px_-10px_rgba(234,88,12,0.25)] overflow-hidden"
+                    className="group bg-stone-900/80 backdrop-blur-sm rounded-2xl border border-stone-800 hover:border-sky-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_40px_-10px_rgba(56,189,248,0.25)] overflow-hidden"
                   >
                     <div className="w-full aspect-[4/3] bg-stone-900 relative overflow-hidden">
                       {rpImg ? (
@@ -159,7 +159,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                       <h3 className="text-sm font-bold text-stone-100 line-clamp-1">
                         {rp.shortName || rp.name}
                       </h3>
-                      <span className="text-lg font-black text-orange-400 tracking-tight mt-1 inline-block">
+                      <span className="text-lg font-black text-sky-400 tracking-tight mt-1 inline-block">
                         ${rp.price}
                       </span>
                     </div>

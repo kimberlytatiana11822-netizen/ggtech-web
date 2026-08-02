@@ -60,7 +60,7 @@ export default function ProductView({
 
   const priceBlock = (
     <div className="flex items-baseline gap-2">
-      <span className="text-4xl font-black text-orange-400 tracking-tight">${total}</span>
+      <span className="text-4xl font-black text-sky-400 tracking-tight">${total}</span>
       {product.oldPrice && product.oldPrice > product.price && (
         <span className="text-lg font-bold text-stone-500 line-through tracking-tight">
           ${product.oldPrice * totalUnits}
