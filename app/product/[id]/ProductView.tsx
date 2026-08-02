@@ -103,8 +103,8 @@ export default function ProductView({
       <div className="hidden md:grid md:grid-cols-2 gap-10 lg:gap-14 items-start">
         <div className="flex flex-col gap-5">
           <GalleryViewer images={images} productName={product.name} />
-          {badgesBlock}
           {actionsBlock}
+          {badgesBlock}
         </div>
         <div className="flex flex-col">
           {titleBlock}
