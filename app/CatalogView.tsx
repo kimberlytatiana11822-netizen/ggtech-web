@@ -440,7 +440,7 @@ export default function CatalogView({
                       router.push(`/product/${product._id}`)
                     }
                   }}
-                  className="group relative min-w-0 bg-stone-900/80 backdrop-blur-sm rounded-2xl border border-stone-800 hover:border-orange-500/40 hover:ring-1 hover:ring-orange-500/20 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_45px_-5px_rgba(234,88,12,0.35)] flex flex-col justify-between overflow-hidden animate-fade-up scale-[1.015] cursor-pointer"
+                  className="group relative min-w-0 bg-stone-900/80 backdrop-blur-sm rounded-2xl border border-stone-800 hover:border-sky-500/40 hover:ring-1 hover:ring-sky-500/20 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_45px_-5px_rgba(56,189,248,0.35)] flex flex-col justify-between overflow-hidden animate-fade-up scale-[1.015] cursor-pointer"
                 >
                   <div className="relative p-3 pb-0 flex flex-col gap-3">
                     {product.oldPrice && product.oldPrice > product.price && (
@@ -486,7 +486,7 @@ export default function CatalogView({
                   </div>
 
                   <div className="p-3 flex flex-col flex-grow relative z-10">
-                    <h3 className="flex justify-center text-base font-black text-stone-100 group-hover:text-orange-400 transition-colors">
+                    <h3 className="flex justify-center text-base font-black text-stone-100 group-hover:text-sky-400 transition-colors">
                       <span className="min-w-0 max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-left">
                         <Highlight text={product.shortName || product.name} />
                       </span>
@@ -519,7 +519,7 @@ export default function CatalogView({
                     </div>
                   </div>
 
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-600 to-amber-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-600 to-sky-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
                 </div>
               )
             })}
