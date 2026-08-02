@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { WhatsAppIcon, ShareIcon } from '@/app/icons'
+import { WhatsAppIcon, ShareIcon, CheckIcon } from '@/app/icons'
 import { SITE } from '@/app/config'
 
 const COLOR_SWATCHES: Record<string, string> = {
@@ -40,7 +40,7 @@ export default function ProductActions({
   onQuantityChange: (q: number) => void
 }) {
   const [copied, setCopied] = useState(false)
-  const [selectedColor, setSelectedColor] = useState<string | null>(null)
+  const [selectedColors, setSelectedColors] = useState<string[]>([])
   const [colorOpen, setColorOpen] = useState(false)
   const [colorWarning, setColorWarning] = useState(false)
   const colorRef = useRef<HTMLDivElement>(null)
@@ -61,14 +61,19 @@ export default function ProductActions({
   }, [colorOpen])
 
   const maxQty = stock && stock > 0 ? Math.max(1, stock) : 99
-  const colorPart = canPickColor && selectedColor ? ` color ${selectedColor}` : ''
+  const colorPart =
+    canPickColor && selectedColors.length > 0
+      ? selectedColors.length === 1
+        ? ` color ${selectedColors[0]}`
+        : ` colores ${selectedColors.join(' y ')}`
+      : ''
   const qtyPart = quantity > 1 ? ` x${quantity}` : ''
   const total = price * quantity
 
   const productText = `Hola! Me interesa "${name.trim()}"${colorPart}${qtyPart} a $${total} UY`
 
   const handleWhatsApp = () => {
-    if (canPickColor && !selectedColor) {
+    if (canPickColor && selectedColors.length === 0) {
       setColorWarning(true)
       return
     }
@@ -99,16 +104,25 @@ export default function ProductActions({
             className="w-full flex items-center justify-between bg-stone-900/80 border border-stone-700 rounded-xl px-4 py-3 text-sm text-stone-100 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-all cursor-pointer"
           >
             <span className="flex items-center gap-2">
-              {selectedColor ? (
-                <span
-                  className="w-3.5 h-3.5 rounded-full border border-stone-600 shrink-0"
-                  style={{ background: COLOR_SWATCHES[selectedColor] ?? '#a8a29e' }}
-                />
+              {selectedColors.length > 0 ? (
+                <span className="flex -space-x-1.5">
+                  {selectedColors.slice(0, 3).map((c) => (
+                    <span
+                      key={c}
+                      className="w-3.5 h-3.5 rounded-full border border-stone-600 shrink-0"
+                      style={{ background: COLOR_SWATCHES[c] ?? '#a8a29e' }}
+                    />
+                  ))}
+                </span>
               ) : (
                 <span className="w-3.5 h-3.5 rounded-full border border-dashed border-stone-500 shrink-0" />
               )}
               <span className="font-bold uppercase tracking-wider text-xs">
-                {selectedColor ? `Color: ${selectedColor}` : 'Color'}
+                {selectedColors.length === 0
+                  ? 'Color'
+                  : selectedColors.length === 1
+                    ? `Color: ${selectedColors[0]}`
+                    : `Colores: ${selectedColors.join(' + ')}`}
               </span>
             </span>
             <svg
@@ -128,15 +142,16 @@ export default function ProductActions({
               className="absolute top-full left-0 right-0 mt-2 bg-stone-900 border border-stone-700 rounded-xl shadow-2xl shadow-black/50 overflow-hidden z-50 animate-dropdown-in"
             >
               {colors?.map((c) => {
-                const isSelected = selectedColor === c
+                const isSelected = selectedColors.includes(c)
                 return (
                   <button
                     key={c}
                     role="option"
                     aria-selected={isSelected}
                     onClick={() => {
-                      setSelectedColor(c)
-                      setColorOpen(false)
+                      setSelectedColors((prev) =>
+                        isSelected ? prev.filter((x) => x !== c) : [...prev, c]
+                      )
                       setColorWarning(false)
                     }}
                     className={`w-full flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${
@@ -150,6 +165,7 @@ export default function ProductActions({
                       style={{ background: COLOR_SWATCHES[c] ?? '#a8a29e' }}
                     />
                     {c}
+                    {isSelected && <CheckIcon className="w-4 h-4 ml-auto" />}
                   </button>
                 )
               })}
@@ -159,7 +175,7 @@ export default function ProductActions({
       )}
 
       {colorWarning && (
-        <p className="text-xs text-red-400 font-bold">Elegí un color para consultar</p>
+        <p className="text-xs text-red-400 font-bold">Elegí al menos un color para consultar</p>
       )}
 
       <div className="flex items-center justify-between gap-3 bg-stone-900/80 border border-stone-700 rounded-xl px-4 py-3">
