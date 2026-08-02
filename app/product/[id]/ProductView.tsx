@@ -26,7 +26,7 @@ export default function ProductView({
 
   const hasColors = !!product.hasColors && !!product.colors && product.colors.length > 0
   const totalUnits = hasColors
-    ? selectedColors.reduce((acc, c) => acc + (colorQty[c] ?? 1), 0)
+    ? Math.max(1, selectedColors.reduce((acc, c) => acc + (colorQty[c] ?? 1), 0))
     : quantity
   const total = product.price * totalUnits
 
