@@ -163,11 +163,14 @@ export default function CatalogView({
   const filterSignature = `${selectedCategory}|${activeFilter}|${sortBy}`
 
   return (
-    <main className="min-h-screen bg-stone-950 text-stone-100 selection:bg-orange-500 selection:text-stone-950 relative">
+    <main className="min-h-screen bg-stone-950 text-stone-100 selection:bg-sky-500 selection:text-stone-950 relative overflow-x-hidden">
 
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-gradient-to-tr from-sky-600/10 via-sky-500/8 to-sky-400/10 blur-[150px] pointer-events-none rounded-full" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-gradient-to-tr from-sky-600/20 via-indigo-600/10 to-fuchsia-500/10 blur-[150px] pointer-events-none rounded-full animate-orbit" />
 
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(rgba(120,113,108,0.12)_1px,transparent_1px)] [background-size:24px_24px]" />
+      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none animate-float" />
+      <div className="absolute bottom-0 -right-32 w-[32rem] h-[32rem] bg-fuchsia-600/10 rounded-full blur-[130px] pointer-events-none animate-float" />
+
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(rgba(148,163,184,0.14)_1px,transparent_1px)] [background-size:22px_22px]" />
 
       <header className="sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
@@ -274,17 +277,18 @@ export default function CatalogView({
         </div>
       </header>
 
-      <section className="max-w-7xl mx-auto px-6 pt-14 md:pt-20 pb-8 relative z-10 text-center">
+      <section className="max-w-7xl mx-auto px-6 pt-16 md:pt-24 pb-8 relative z-10 text-center">
         <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-sky-400 bg-sky-500/10 border border-sky-500/30 px-4 py-1.5 rounded-full">
-          Tienda en <span className="text-white">Artigas</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
+          Tienda en <span className="text-white">Artigas, Uruguay</span>
         </span>
-        <h1 className="mt-5 text-4xl md:text-6xl font-black tracking-tight text-stone-100">
-          Encontrá todo lo que <span className="text-sky-400">necesitás</span>
+        <h1 className="mt-6 text-4xl md:text-6xl font-black tracking-tight text-stone-100">
+          Encontrá todo lo que <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-400 to-fuchsia-400">necesitás</span>
         </h1>
-        <p className="mt-4 text-stone-400 text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-light">
+        <p className="mt-5 text-stone-400 text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-light">
           Tecnología, cocina, belleza y más. Productos seleccionados con los mejores precios, hacé tu pedido directo por WhatsApp.
         </p>
-        <div className="mt-7 flex items-center justify-center gap-3">
+        <div className="mt-8 flex items-center justify-center gap-3">
           <a
             href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent('Hola! Quiero consultar por un producto de Artigas Shop')}`}
             target="_blank"
@@ -293,6 +297,15 @@ export default function CatalogView({
           >
             <WhatsAppIcon className="w-4 h-4" />
             Consultar por WhatsApp
+          </a>
+          <a
+            href={SITE.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 bg-gradient-to-tr from-fuchsia-600 via-rose-500 to-amber-400 hover:brightness-110 text-white font-black py-4 px-6 rounded-xl transition-all duration-300 uppercase tracking-wider text-xs cursor-pointer hover:-translate-y-0.5 active:scale-95"
+          >
+            <InstagramIcon className="w-4 h-4" />
+            Instagram
           </a>
         </div>
       </section>
@@ -304,8 +317,8 @@ export default function CatalogView({
             { icon: LockIcon, label: 'Pago seguro', sub: 'abonás al recibir' },
             { icon: CheckIcon, label: 'Garantía', sub: 'calidad garantizada' },
           ].map((b) => (
-            <div key={b.label} className="flex items-center gap-3 bg-stone-900/60 backdrop-blur-sm border border-stone-800 rounded-2xl py-4 px-5">
-              <span className="text-sky-400" aria-hidden="true">
+            <div key={b.label} className="flex items-center gap-3 bg-stone-900/70 backdrop-blur-sm border border-stone-800 rounded-2xl py-4 px-5 hover:border-sky-500/40 hover:bg-stone-900 transition-all duration-300">
+              <span className="text-sky-400 shrink-0" aria-hidden="true">
                 <b.icon className="w-6 h-6" />
               </span>
               <div className="flex flex-col">
@@ -440,7 +453,7 @@ export default function CatalogView({
                       router.push(`/product/${product._id}`)
                     }
                   }}
-                  className="group relative min-w-0 bg-stone-900/80 backdrop-blur-sm rounded-2xl border border-stone-800 hover:border-sky-500/40 hover:ring-1 hover:ring-sky-500/20 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_45px_-5px_rgba(56,189,248,0.35)] flex flex-col justify-between overflow-hidden animate-fade-up scale-[1.015] cursor-pointer"
+                  className="group relative min-w-0 bg-gradient-to-b from-stone-900/90 to-stone-900/60 backdrop-blur-sm rounded-2xl border border-stone-800 hover:border-sky-500/50 hover:ring-1 hover:ring-sky-500/20 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_45px_-5px_rgba(56,189,248,0.4)] flex flex-col justify-between overflow-hidden animate-fade-up scale-[1.015] cursor-pointer"
                 >
                   <div className="relative p-3 pb-0 flex flex-col gap-3">
                     {product.oldPrice && product.oldPrice > product.price && (
@@ -497,7 +510,7 @@ export default function CatalogView({
 
                     <div className="mt-auto pt-3 flex flex-col gap-2">
                       <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-black text-stone-100 tracking-tight">${product.price}</span>
+                        <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-cyan-300 tracking-tight">${product.price}</span>
                         {product.oldPrice && product.oldPrice > product.price && (
                           <span className="text-sm font-bold text-stone-500 line-through">${product.oldPrice}</span>
                         )}
