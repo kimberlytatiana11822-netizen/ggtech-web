@@ -159,7 +159,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                       <h3 className="text-sm font-bold text-stone-100 line-clamp-1">
                         {rp.shortName || rp.name}
                       </h3>
-                      <span className="text-lg font-black text-sky-400 tracking-tight mt-1 inline-block">
+                      <span className="text-lg font-black text-stone-100 tracking-tight mt-1 inline-block">
                         ${rp.price}
                       </span>
                     </div>

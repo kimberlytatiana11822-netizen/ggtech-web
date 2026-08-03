@@ -497,7 +497,7 @@ export default function CatalogView({
 
                     <div className="mt-auto pt-3 flex flex-col gap-2">
                       <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-black text-sky-400 tracking-tight">${product.price}</span>
+                        <span className="text-2xl font-black text-stone-100 tracking-tight">${product.price}</span>
                         {product.oldPrice && product.oldPrice > product.price && (
                           <span className="text-sm font-bold text-stone-500 line-through">${product.oldPrice}</span>
                         )}
