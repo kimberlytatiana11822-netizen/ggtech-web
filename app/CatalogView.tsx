@@ -39,7 +39,7 @@ function ExpandableDescription({ text }: { text: string }) {
   return (
     <div className="mt-3 w-full">
       <div className="flex items-center justify-center gap-1.5 mb-1.5">
-        <CheckIcon className="w-3 h-3 text-orange-400" />
+        <CheckIcon className="w-3 h-3 text-sky-400" />
         <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-stone-500">Características</span>
       </div>
       <div className="flex items-center justify-center w-fit mx-auto max-w-full h-[52px] md:h-[62px]">
@@ -165,7 +165,7 @@ export default function CatalogView({
   return (
     <main className="min-h-screen bg-stone-950 text-stone-100 selection:bg-orange-500 selection:text-stone-950 relative">
 
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-gradient-to-tr from-orange-600/10 via-amber-600/8 to-yellow-500/10 blur-[150px] pointer-events-none rounded-full" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-gradient-to-tr from-sky-600/10 via-sky-500/8 to-sky-400/10 blur-[150px] pointer-events-none rounded-full" />
 
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(rgba(120,113,108,0.12)_1px,transparent_1px)] [background-size:24px_24px]" />
 
@@ -195,7 +195,7 @@ export default function CatalogView({
                   aria-selected={isActive}
                   className={`px-2.5 py-0.5 md:px-3 md:py-2 rounded-lg text-[11px] md:text-xs font-bold uppercase tracking-wider transition-all duration-200 whitespace-nowrap ${
                     isActive
-                      ? 'text-orange-400'
+                      ? 'text-sky-400'
                       : 'text-stone-500 hover:text-stone-100'
                   }`}
                 >
@@ -218,7 +218,7 @@ export default function CatalogView({
                     showFilters
                       ? `opacity-100 translate-y-0 px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider ${
                           activeFilter
-                            ? 'bg-orange-600 text-white shadow-[0_0_15px_rgba(234,88,12,0.4)] border border-orange-400/50'
+                            ? 'bg-sky-600 text-white shadow-[0_0_15px_rgba(234,88,12,0.4)] border border-orange-400/50'
                             : 'bg-stone-900/50 text-stone-400 hover:text-stone-100 hover:bg-stone-800 border border-stone-800'
                         }`
                       : 'opacity-0 translate-y-2 px-4 py-0 border-transparent'
@@ -245,13 +245,13 @@ export default function CatalogView({
                       }}
                       className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors ${
                         isSelected
-                          ? 'bg-orange-600/20 text-orange-400'
+                          ? 'bg-sky-600/20 text-sky-400'
                           : 'text-stone-300 hover:bg-stone-800 hover:text-stone-100'
                       }`}
                     >
                       {f.label}
                       {isSelected && (
-                        <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <svg className="w-4 h-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
                       )}
@@ -275,11 +275,11 @@ export default function CatalogView({
       </header>
 
       <section className="max-w-7xl mx-auto px-6 pt-14 md:pt-20 pb-8 relative z-10 text-center">
-        <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-orange-400 bg-orange-500/10 border border-orange-500/30 px-4 py-1.5 rounded-full">
+        <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-sky-400 bg-sky-500/10 border border-sky-500/30 px-4 py-1.5 rounded-full">
           Tienda en <span className="text-white">Artigas</span>
         </span>
         <h1 className="mt-5 text-4xl md:text-6xl font-black tracking-tight text-stone-100">
-          Encontrá todo lo que <span className="text-orange-400">necesitás</span>
+          Encontrá todo lo que <span className="text-sky-400">necesitás</span>
         </h1>
         <p className="mt-4 text-stone-400 text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-light">
           Tecnología, cocina, belleza y más. Productos seleccionados con los mejores precios, hacé tu pedido directo por WhatsApp.
@@ -305,7 +305,7 @@ export default function CatalogView({
             { icon: CheckIcon, label: 'Garantía', sub: 'calidad garantizada' },
           ].map((b) => (
             <div key={b.label} className="flex items-center gap-3 bg-stone-900/60 backdrop-blur-sm border border-stone-800 rounded-2xl py-4 px-5">
-              <span className="text-orange-400" aria-hidden="true">
+              <span className="text-sky-400" aria-hidden="true">
                 <b.icon className="w-6 h-6" />
               </span>
               <div className="flex flex-col">
@@ -320,8 +320,8 @@ export default function CatalogView({
       <div className="max-w-7xl mx-auto px-6 py-10 relative z-10">
         <div className="mb-8 flex items-center justify-between border-b border-stone-800/60 pb-4">
           <h2 className="flex items-center gap-3 text-xl font-black tracking-tight text-stone-200">
-            Catálogo <span className="text-orange-400">{selectedCategory === 'Todos' ? '' : `(${selectedCategory})`}</span>
-            <span className="text-xs font-black tracking-widest text-white bg-orange-600 shadow-[0_0_15px_rgba(234,88,12,0.6)] px-3 py-1.5 rounded-full">
+            Catálogo <span className="text-sky-400">{selectedCategory === 'Todos' ? '' : `(${selectedCategory})`}</span>
+            <span className="text-xs font-black tracking-widest text-white bg-sky-600 shadow-[0_0_15px_rgba(234,88,12,0.6)] px-3 py-1.5 rounded-full">
               {filteredProducts.length}
             </span>
           </h2>
@@ -376,13 +376,13 @@ export default function CatalogView({
                       }}
                       className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium transition-colors ${
                         isSelected
-                          ? 'bg-orange-600/20 text-orange-400'
+                          ? 'bg-sky-600/20 text-sky-400'
                           : 'text-stone-300 hover:bg-stone-800 hover:text-stone-100'
                       }`}
                     >
                       {opt.label}
                       {isSelected && (
-                        <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <svg className="w-4 h-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
                       )}
@@ -401,7 +401,7 @@ export default function CatalogView({
             </div>
             <h3 className="text-lg font-black text-stone-200">
               {searchQuery
-                ? <>No encontramos nada para <span className="text-orange-400">&ldquo;{searchQuery}&rdquo;</span></>
+                ? <>No encontramos nada para <span className="text-sky-400">&ldquo;{searchQuery}&rdquo;</span></>
                 : 'No hay productos en esta categoría'}
             </h3>
             <p className="text-stone-500 text-sm mt-2 max-w-sm leading-relaxed">
@@ -416,7 +416,7 @@ export default function CatalogView({
                   setActiveFilter(null)
                   setSelectedCategory('Todos')
                 }}
-                className="mt-6 inline-flex items-center justify-center gap-2 bg-stone-900 border border-stone-700 hover:border-orange-500/50 hover:text-orange-400 text-stone-200 font-bold py-3 px-6 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer"
+                className="mt-6 inline-flex items-center justify-center gap-2 bg-stone-900 border border-stone-700 hover:border-orange-500/50 hover:text-sky-400 text-stone-200 font-bold py-3 px-6 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer"
               >
                 Limpiar búsqueda
               </button>
