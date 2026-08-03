@@ -106,7 +106,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   }
 
   return (
-    <main className="min-h-screen bg-stone-950 text-stone-100 py-12 px-6 relative selection:bg-orange-500 selection:text-stone-950 overflow-x-hidden">
+    <main className="min-h-screen bg-stone-950 text-stone-100 py-12 px-4 md:px-6 relative selection:bg-orange-500 selection:text-stone-950 overflow-x-hidden">
 
       <script
         type="application/ld+json"

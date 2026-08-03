@@ -180,7 +180,7 @@ export default function CatalogView({
             </span>
           </Link>
 
-          <nav className="flex items-center gap-0.5 md:gap-2 overflow-x-auto max-w-full md:pb-0 no-scrollbar relative z-10 md:pr-28" role="tablist">
+          <nav className="flex items-center gap-0.5 md:gap-2 overflow-x-auto max-w-full md:pb-0 no-scrollbar relative z-10 md:pr-40" role="tablist">
             {categories.map((cat) => {
               const isActive = selectedCategory.toLowerCase() === cat.toLowerCase()
               return (
@@ -214,7 +214,7 @@ export default function CatalogView({
                   aria-haspopup="menu"
                   aria-hidden={!showFilters}
                   tabIndex={showFilters ? 0 : -1}
-                  className={`flex items-center gap-1.5 whitespace-nowrap w-full md:w-auto justify-center transition-all duration-300 ease-out will-change-transform ${
+                  className={`flex items-center gap-1.5 whitespace-nowrap w-full md:w-auto justify-center max-w-[10rem] transition-all duration-300 ease-out will-change-transform ${
                     showFilters
                       ? `opacity-100 translate-y-0 px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider ${
                           activeFilter
@@ -227,7 +227,7 @@ export default function CatalogView({
                   <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                   </svg>
-                  <span className="shrink-0">{activeFilter || 'Filtros'}</span>
+                  <span className="shrink-0 min-w-0 truncate">{activeFilter || 'Filtros'}</span>
                 </button>
               </div>
             </div>
@@ -471,13 +471,13 @@ export default function CatalogView({
                     {typeof product.stock === 'number' && (
                       <div className="absolute top-0 left-2 z-10">
                         {product.stock > 0 ? (
-                          <span className="inline-flex items-center gap-1 text-[8px] font-black tracking-widest uppercase text-white bg-green-600/95 shadow-[0_0_12px_rgba(34,197,94,0.4)] px-2 py-1 rounded-full backdrop-blur-md">
-                            <span className="w-1 h-1 rounded-full bg-white animate-pulse" />
+                          <span className="inline-flex items-center gap-1 text-[9px] font-black tracking-widest uppercase text-white bg-green-600/95 shadow-[0_0_12px_rgba(34,197,94,0.4)] px-2 py-1 rounded-full backdrop-blur-md">
+                            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                             Disponible
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-[8px] font-black tracking-widest uppercase text-white bg-red-600/95 shadow-[0_0_12px_rgba(220,38,38,0.6)] px-2 py-1 rounded-full backdrop-blur-md">
-                            <span className="w-1 h-1 rounded-full bg-white/80" />
+                          <span className="inline-flex items-center gap-1 text-[9px] font-black tracking-widest uppercase text-white bg-red-600/95 shadow-[0_0_12px_rgba(220,38,38,0.6)] px-2 py-1 rounded-full backdrop-blur-md">
+                            <span className="w-1.5 h-1.5 rounded-full bg-white/80" />
                             Sin stock
                           </span>
                         )}

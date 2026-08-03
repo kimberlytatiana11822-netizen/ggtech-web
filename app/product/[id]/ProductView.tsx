@@ -108,7 +108,7 @@ export default function ProductView({
   )
 
   return (
-    <div className="bg-stone-900/90 backdrop-blur-2xl rounded-3xl border border-stone-800 p-8 md:p-12 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)]">
+    <div className="bg-stone-900/90 backdrop-blur-2xl rounded-3xl border border-stone-800 p-4 md:p-12 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)]">
       {/* Móvil: título → galería → badges → descripción → precio → acciones */}
       <div className="md:hidden flex flex-col gap-8">
         <div>{titleBlock}</div>

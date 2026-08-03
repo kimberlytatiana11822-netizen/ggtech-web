@@ -183,7 +183,7 @@ export default function GalleryViewer({ images, productName }: { images: string[
           width={1200}
           height={900}
           priority
-          className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-auto max-h-[440px] md:max-h-none object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute bottom-3 right-3 bg-stone-900/80 backdrop-blur-md text-stone-100 text-[10px] font-bold px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
           <span>Click para ampliar</span>
