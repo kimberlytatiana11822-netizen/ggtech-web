@@ -469,7 +469,7 @@ export default function CatalogView({
                     </div>
 
                     {typeof product.stock === 'number' && (
-                      <div className="absolute -bottom-2 right-2 z-10">
+                      <div className="absolute top-3 left-2 z-10">
                         {product.stock > 0 ? (
                           <span className="inline-flex items-center gap-1 text-[8px] font-black tracking-widest uppercase text-white bg-green-600/95 shadow-[0_0_12px_rgba(34,197,94,0.4)] px-2 py-1 rounded-full backdrop-blur-md">
                             <span className="w-1 h-1 rounded-full bg-white animate-pulse" />
@@ -497,7 +497,7 @@ export default function CatalogView({
 
                     <div className="mt-auto pt-3 flex flex-col gap-2">
                       <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-black text-orange-400 tracking-tight">${product.price}</span>
+                        <span className="text-2xl font-black text-sky-400 tracking-tight">${product.price}</span>
                         {product.oldPrice && product.oldPrice > product.price && (
                           <span className="text-sm font-bold text-stone-500 line-through">${product.oldPrice}</span>
                         )}
