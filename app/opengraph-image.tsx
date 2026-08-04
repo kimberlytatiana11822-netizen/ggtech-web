@@ -25,7 +25,7 @@ export default function OpengraphImage() {
             position: 'absolute',
             inset: 0,
             background:
-              'radial-gradient(600px circle at 20% 10%, rgba(234,88,12,0.35), transparent 60%), radial-gradient(600px circle at 90% 90%, rgba(217,119,6,0.25), transparent 60%)',
+              'radial-gradient(600px circle at 20% 10%, rgba(56,189,248,0.35), transparent 60%), radial-gradient(600px circle at 90% 90%, rgba(255,255,255,0.12), transparent 60%)',
           }}
         />
         <div

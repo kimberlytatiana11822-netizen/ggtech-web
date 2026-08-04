@@ -201,7 +201,7 @@ export default function GalleryViewer({ images, productName }: { images: string[
                 onClick={() => setActiveIndex(index)}
                 className={`relative flex-1 min-w-0 aspect-square max-w-20 md:max-w-24 bg-neutral-900 rounded-xl overflow-hidden cursor-pointer transition-all duration-200 border-2 ${
                   isActive
-                    ? 'border-orange-400 shadow-[0_0_20px_rgba(234,88,12,0.5)] opacity-100'
+                    ? 'border-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.5)] opacity-100'
                     : 'border-stone-700 opacity-60 hover:opacity-100 hover:border-stone-500'
                 }`}
                 aria-label={`Ver imagen ${index + 1}`}

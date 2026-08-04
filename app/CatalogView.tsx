@@ -173,17 +173,18 @@ export default function CatalogView({
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(rgba(148,163,184,0.14)_1px,transparent_1px)] [background-size:22px_22px]" />
 
       <header className="sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
-        <div className={`rounded-b-2xl border-b border-stone-800/80 transition-all duration-300 ${scrolled ? 'bg-stone-950/90 backdrop-blur-xl shadow-[0_15px_40px_-15px_rgba(0,0,0,0.8)]' : 'bg-stone-950/80 backdrop-blur-xl'}`}>
+        <div className={`rounded-b-2xl border-b transition-all duration-300 relative ${scrolled ? 'border-sky-500/30 bg-stone-950/90 backdrop-blur-xl shadow-[0_15px_40px_-15px_rgba(0,0,0,0.8)]' : 'border-stone-800/80 bg-stone-950/80 backdrop-blur-xl'}`}>
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-sky-600/5 via-transparent to-fuchsia-600/5 rounded-b-2xl" />
+          <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="px-3 pt-1 pb-0.5 md:h-16 md:px-6 md:py-3 flex flex-col md:flex-row items-center justify-between gap-0.5 md:gap-3 transition-all duration-300 relative">
 
-          <Link href="/" className="flex items-center gap-2 group shrink-0">
+          <Link href="/" className="flex items-center gap-2 group shrink-0 relative">
             <span className="text-lg md:text-2xl font-black tracking-tight text-stone-100 group-hover:text-orange-400 transition-colors">
               Artigas<span className="text-orange-500"> Shop</span>
             </span>
           </Link>
 
-          <nav className="flex items-center gap-0.5 md:gap-2 overflow-x-auto max-w-full md:pb-0 no-scrollbar relative z-10 md:pr-40" role="tablist">
+          <nav className="flex items-center gap-1 md:gap-2 overflow-x-auto max-w-full md:pb-0 no-scrollbar relative z-10 md:pr-40" role="tablist">
             {categories.map((cat) => {
               const isActive = selectedCategory.toLowerCase() === cat.toLowerCase()
               return (
@@ -196,10 +197,10 @@ export default function CatalogView({
                   }}
                   role="tab"
                   aria-selected={isActive}
-                  className={`px-2.5 py-0.5 md:px-3 md:py-2 rounded-lg text-[11px] md:text-xs font-bold uppercase tracking-wider transition-all duration-200 whitespace-nowrap ${
+                  className={`px-2.5 py-0.5 md:px-4 md:py-2 rounded-xl text-[11px] md:text-xs font-black uppercase tracking-wider transition-all duration-200 whitespace-nowrap border ${
                     isActive
-                      ? 'text-sky-400'
-                      : 'text-stone-500 hover:text-stone-100'
+                      ? 'text-white bg-gradient-to-r from-sky-600 to-sky-500 border-sky-400/60 shadow-[0_0_20px_-4px_rgba(56,189,248,0.8)]'
+                      : 'text-stone-400 border-transparent hover:text-sky-300 hover:border-sky-500/40 hover:bg-sky-500/10'
                   }`}
                 >
                   {cat}
@@ -221,7 +222,7 @@ export default function CatalogView({
                     showFilters
                       ? `opacity-100 translate-y-0 px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider ${
                           activeFilter
-                            ? 'bg-sky-600 text-white shadow-[0_0_15px_rgba(234,88,12,0.4)] border border-orange-400/50'
+                            ? 'bg-sky-600 text-white shadow-[0_0_15px_rgba(255,255,255,0.4)] border border-orange-400/50'
                             : 'bg-stone-900/50 text-stone-400 hover:text-stone-100 hover:bg-stone-800 border border-stone-800'
                         }`
                       : 'opacity-0 translate-y-2 px-4 py-0 border-transparent'
@@ -298,15 +299,6 @@ export default function CatalogView({
             <WhatsAppIcon className="w-4 h-4" />
             Consultar por WhatsApp
           </a>
-          <a
-            href={SITE.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 bg-gradient-to-tr from-fuchsia-600 via-rose-500 to-amber-400 hover:brightness-110 text-white font-black py-4 px-6 rounded-xl transition-all duration-300 uppercase tracking-wider text-xs cursor-pointer hover:-translate-y-0.5 active:scale-95"
-          >
-            <InstagramIcon className="w-4 h-4" />
-            Instagram
-          </a>
         </div>
       </section>
 
@@ -334,7 +326,7 @@ export default function CatalogView({
         <div className="mb-8 flex items-center justify-between border-b border-stone-800/60 pb-4">
           <h2 className="flex items-center gap-3 text-xl font-black tracking-tight text-stone-200">
             Catálogo <span className="text-sky-400">{selectedCategory === 'Todos' ? '' : `(${selectedCategory})`}</span>
-            <span className="text-xs font-black tracking-widest text-white bg-sky-600 shadow-[0_0_15px_rgba(234,88,12,0.6)] px-3 py-1.5 rounded-full">
+            <span className="text-xs font-black tracking-widest text-white bg-sky-600 shadow-[0_0_15px_rgba(255,255,255,0.6)] px-3 py-1.5 rounded-full">
               {filteredProducts.length}
             </span>
           </h2>
