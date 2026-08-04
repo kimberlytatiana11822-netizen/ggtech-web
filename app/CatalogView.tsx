@@ -492,14 +492,11 @@ export default function CatalogView({
                   </div>
 
                   <div className="p-3 flex flex-col flex-grow relative z-10">
-                    <h3 className="flex justify-center text-base font-black text-stone-100 group-hover:text-sky-400 transition-colors">
-                      <span className="min-w-0 max-w-full text-left line-clamp-2">
+                    <h3 className="flex justify-center text-sm md:text-base font-black text-stone-100 group-hover:text-sky-400 transition-colors">
+                      <span className="min-w-0 max-w-full text-left overflow-hidden text-ellipsis whitespace-nowrap">
                         <Highlight text={product.shortName || product.name} />
                       </span>
                     </h3>
-                    <MemoizedExpandableDescription
-                      text={product.shortDescription || product.description || 'Sin descripción disponible.'}
-                    />
 
                     <div className="mt-auto pt-3 flex flex-col gap-2">
                       <div className="flex items-baseline gap-2 justify-center">
