@@ -176,7 +176,7 @@ export default function CatalogView({
         <div className={`rounded-b-2xl border-b transition-all duration-300 relative ${scrolled ? 'border-sky-500/30 bg-stone-950/90 backdrop-blur-xl shadow-[0_15px_40px_-15px_rgba(0,0,0,0.8)]' : 'border-stone-800/80 bg-stone-950/80 backdrop-blur-xl'}`}>
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-sky-600/5 via-transparent to-fuchsia-600/5 rounded-b-2xl" />
           <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <div className="px-3 pt-1 pb-0.5 md:h-16 md:px-6 md:py-3 flex flex-col md:flex-row items-center justify-between gap-0.5 md:gap-3 transition-all duration-300 relative">
+          <div className="px-3 pt-2 pb-1.5 md:h-16 md:px-6 md:py-3 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-3 transition-all duration-300 relative">
 
           <Link href="/" className="flex items-center gap-2 group shrink-0 relative">
             <span className="text-lg md:text-2xl font-black tracking-tight text-stone-100 group-hover:text-orange-400 transition-colors">
@@ -184,7 +184,7 @@ export default function CatalogView({
             </span>
           </Link>
 
-          <nav className="flex items-center gap-1 md:gap-2 overflow-x-auto max-w-full md:pb-0 no-scrollbar relative z-10 md:pr-40" role="tablist">
+          <nav className="flex items-center gap-1.5 md:gap-2 overflow-x-auto max-w-full md:pb-0 no-scrollbar relative z-10 md:pr-40" role="tablist">
             {categories.map((cat) => {
               const isActive = selectedCategory.toLowerCase() === cat.toLowerCase()
               return (
@@ -279,11 +279,12 @@ export default function CatalogView({
       </header>
 
       <section className="max-w-7xl mx-auto px-6 pt-16 md:pt-24 pb-8 relative z-10 text-center">
-        <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-sky-400 bg-sky-500/10 border border-sky-500/30 px-4 py-1.5 rounded-full">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.15),transparent_70%)]" />
+        <span className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-sky-400 bg-sky-500/10 border border-sky-500/30 px-4 py-1.5 rounded-full relative">
           <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
           Tienda en <span className="text-white">Artigas, Uruguay</span>
         </span>
-        <h1 className="mt-6 text-4xl md:text-6xl font-black tracking-tight text-stone-100">
+        <h1 className="mt-6 text-4xl md:text-6xl font-black tracking-tight text-stone-100 leading-tight">
           Encontrá todo lo que <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-400 to-fuchsia-400">necesitás</span>
         </h1>
         <p className="mt-5 text-stone-400 text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-light">
@@ -303,7 +304,24 @@ export default function CatalogView({
       </section>
 
       <section className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 md:hidden">
+          {[
+            { icon: TruckIcon, label: 'Envío', sub: 'a domicilio' },
+            { icon: LockIcon, label: 'Pago seguro', sub: 'abonás al recibir' },
+            { icon: CheckIcon, label: 'Garantía', sub: 'calidad garantizada' },
+          ].map((b) => (
+            <div key={b.label} className="flex-shrink-0 w-56 flex items-center gap-3 bg-stone-900/70 backdrop-blur-sm border border-stone-800 rounded-2xl py-4 px-5 hover:border-sky-500/40 hover:bg-stone-900 transition-all duration-300">
+              <span className="text-sky-400 shrink-0" aria-hidden="true">
+                <b.icon className="w-6 h-6" />
+              </span>
+              <div className="flex flex-col">
+                <span className="text-sm font-bold text-stone-100">{b.label}</span>
+                <span className="text-xs text-stone-500">{b.sub}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="hidden md:grid grid-cols-3 gap-4">
           {[
             { icon: TruckIcon, label: 'Envío', sub: 'a domicilio' },
             { icon: LockIcon, label: 'Pago seguro', sub: 'abonás al recibir' },
@@ -341,7 +359,7 @@ export default function CatalogView({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Filtrar productos..."
-              className="w-full bg-stone-900/80 border border-stone-700 rounded-xl pl-10 pr-4 py-2.5 text-sm text-stone-100 placeholder-stone-500 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-all"
+              className="w-full bg-stone-900/80 border border-stone-700 rounded-xl pl-10 pr-4 py-2.5 text-sm text-stone-100 placeholder-stone-500 focus:outline-none focus:border-sky-500/60 focus:ring-1 focus:ring-sky-500/20 transition-all"
             />
           </label>
           <div className="relative self-center sm:self-auto sm:shrink-0" ref={sortRef}>
@@ -349,7 +367,7 @@ export default function CatalogView({
               onClick={() => setSortOpen(!sortOpen)}
               aria-expanded={sortOpen}
               aria-haspopup="listbox"
-              className="flex items-center gap-1.5 bg-stone-900/80 border border-stone-700 rounded-xl pl-3 pr-2.5 py-2.5 text-sm text-stone-100 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-all cursor-pointer"
+              className="flex items-center gap-1.5 bg-stone-900/80 border border-stone-700 rounded-xl pl-3 pr-2.5 py-2.5 text-sm text-stone-100 focus:outline-none focus:border-sky-500/60 focus:ring-1 focus:ring-sky-500/20 transition-all cursor-pointer"
             >
               <span className="whitespace-nowrap">{sortLabel}</span>
               <svg
@@ -445,7 +463,7 @@ export default function CatalogView({
                       router.push(`/product/${product._id}`)
                     }
                   }}
-                  className="group relative min-w-0 bg-gradient-to-b from-stone-900/90 to-stone-900/60 backdrop-blur-sm rounded-2xl border border-stone-800 hover:border-sky-500/50 hover:ring-1 hover:ring-sky-500/20 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_45px_-5px_rgba(56,189,248,0.4)] flex flex-col justify-between overflow-hidden animate-fade-up scale-[1.015] cursor-pointer"
+                  className="group relative min-w-0 bg-gradient-to-b from-stone-900/95 to-stone-900/70 backdrop-blur-sm rounded-2xl border border-stone-800/60 hover:border-sky-500/60 hover:ring-1 hover:ring-sky-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_25px_50px_-10px_rgba(0,0,0,0.5),0_0_60px_-10px_rgba(56,189,248,0.3)] flex flex-col justify-between overflow-hidden animate-fade-up cursor-pointer"
                 >
                   <div className="relative p-3 pb-0 flex flex-col gap-3">
                     {product.oldPrice && product.oldPrice > product.price && (
@@ -456,7 +474,7 @@ export default function CatalogView({
                       </div>
                     )}
 
-                    <div className="w-full aspect-square bg-stone-900 relative overflow-hidden rounded-2xl border border-stone-800/80 shadow-lg">
+                    <div className="w-full aspect-square bg-stone-900 relative overflow-hidden rounded-2xl border border-stone-800/60 shadow-lg">
                       {mainImg ? (
                         <Image
                           src={urlFor(mainImg).width(500).auto('format').url()}
@@ -469,7 +487,7 @@ export default function CatalogView({
                       ) : (
                         <div className="text-stone-500 text-xs font-mono">Sin Imagen</div>
                       )}
-                      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-stone-950/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-stone-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       <div className="absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[150%] group-hover:translate-x-[450%] transition-transform duration-[900ms] ease-out pointer-events-none" />
                     </div>
 
@@ -501,7 +519,7 @@ export default function CatalogView({
                     />
 
                     <div className="mt-auto pt-3 flex flex-col gap-2">
-                      <div className="flex items-baseline gap-2">
+                      <div className="flex items-baseline gap-2 justify-center">
                         <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-cyan-300 tracking-tight">${product.price}</span>
                         {product.oldPrice && product.oldPrice > product.price && (
                           <span className="text-sm font-bold text-stone-500 line-through">${product.oldPrice}</span>
