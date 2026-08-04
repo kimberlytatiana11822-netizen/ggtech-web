@@ -493,7 +493,7 @@ export default function CatalogView({
 
                   <div className="p-3 flex flex-col flex-grow relative z-10">
                     <h3 className="flex justify-center text-sm md:text-base font-black text-stone-100 group-hover:text-sky-400 transition-colors">
-                      <span className="min-w-0 max-w-full text-left overflow-hidden text-ellipsis whitespace-nowrap">
+                      <span className="min-w-0 max-w-full text-left line-clamp-2">
                         <Highlight text={product.shortName || product.name} />
                       </span>
                     </h3>
