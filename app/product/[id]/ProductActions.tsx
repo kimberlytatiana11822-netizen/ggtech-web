@@ -55,7 +55,8 @@ export default function ProductActions({
   const colorRef = useRef<HTMLDivElement>(null)
 
   const canPickColor = hasColors && !!colors && colors.length > 0
-  const maxQty = stock && stock > 0 ? Math.max(1, stock) : 99
+  const hasStock = !!stock && stock > 0
+  const maxQty = hasStock ? Math.max(1, stock!) : 99
   const atMaxStock = stock && stock > 0 ? totalUnits >= maxQty : false
   const total = price * totalUnits
 
@@ -186,7 +187,7 @@ export default function ProductActions({
         <p className="text-xs text-red-400 font-bold">Elegí al menos un color para consultar</p>
       )}
 
-      {canPickColor && selectedColors.length > 0 && (
+      {hasStock && canPickColor && selectedColors.length > 0 && (
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between px-1">
             <span className="text-xs font-bold uppercase tracking-wider text-stone-400">Cantidad por color</span>
@@ -234,7 +235,7 @@ export default function ProductActions({
         </div>
       )}
 
-      {!canPickColor && (
+      {hasStock && !canPickColor && (
         <div className="flex items-center justify-between gap-3 bg-stone-900/80 border border-stone-700 rounded-xl px-4 py-3">
           <span className="text-xs font-bold uppercase tracking-wider text-stone-400">Cantidad</span>
           <div className="flex items-center gap-3">
