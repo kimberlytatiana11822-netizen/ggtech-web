@@ -304,24 +304,7 @@ export default function CatalogView({
       </section>
 
       <section className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 md:hidden">
-          {[
-            { icon: TruckIcon, label: 'Envío', sub: 'a domicilio' },
-            { icon: LockIcon, label: 'Pago seguro', sub: 'abonás al recibir' },
-            { icon: CheckIcon, label: 'Garantía', sub: 'calidad garantizada' },
-          ].map((b) => (
-            <div key={b.label} className="flex-shrink-0 w-56 flex items-center gap-3 bg-stone-900/70 backdrop-blur-sm border border-stone-800 rounded-2xl py-4 px-5 hover:border-sky-500/40 hover:bg-stone-900 transition-all duration-300">
-              <span className="text-sky-400 shrink-0" aria-hidden="true">
-                <b.icon className="w-6 h-6" />
-              </span>
-              <div className="flex flex-col">
-                <span className="text-sm font-bold text-stone-100">{b.label}</span>
-                <span className="text-xs text-stone-500">{b.sub}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="hidden md:grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
             { icon: TruckIcon, label: 'Envío', sub: 'a domicilio' },
             { icon: LockIcon, label: 'Pago seguro', sub: 'abonás al recibir' },
