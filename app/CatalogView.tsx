@@ -198,16 +198,14 @@ export default function CatalogView({
               -{discount}%
             </span>
           )}
-          {typeof product.stock === 'number' && (
-            <span className={`absolute top-3 right-3 z-10 inline-flex items-center gap-1 text-[9px] font-black tracking-widest uppercase px-2.5 py-1 rounded-full border backdrop-blur-md ${
-              product.stock > 0
-                ? 'text-white border-neutral-600 bg-black/60'
-                : 'text-neutral-400 border-neutral-800 bg-black/60'
-            }`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${product.stock > 0 ? 'bg-white animate-pulse' : 'bg-neutral-500'}`} />
-              {product.stock > 0 ? 'Stock' : 'Agotado'}
-            </span>
-          )}
+          <span className={`absolute top-3 right-3 z-10 inline-flex items-center gap-1 text-[9px] font-black tracking-widest uppercase px-2.5 py-1 rounded-full border backdrop-blur-md ${
+            product.stock === 0
+              ? 'text-neutral-400 border-neutral-800 bg-black/60'
+              : 'text-white border-neutral-600 bg-black/60'
+          }`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${product.stock === 0 ? 'bg-neutral-500' : 'bg-white animate-pulse'}`} />
+            {product.stock === 0 ? 'Agotado' : 'Stock'}
+          </span>
         </div>
 
         <div className="p-4 flex flex-col flex-grow">
