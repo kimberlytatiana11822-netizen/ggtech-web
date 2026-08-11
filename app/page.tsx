@@ -22,6 +22,8 @@ async function getProducts(): Promise<Product[]> {
     shortDescription,
     category,
     stock,
+    hasColors,
+    colors,
     featured,
     image,
     "mainImage": images[0]

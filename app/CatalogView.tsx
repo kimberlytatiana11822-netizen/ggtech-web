@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { urlFor } from '@/sanity/lib/image'
-import { SearchIcon, WhatsAppIcon, TruckIcon, LockIcon, CheckIcon, InstagramIcon } from './icons'
+import { SearchIcon, WhatsAppIcon, TruckIcon, LockIcon, CheckIcon, InstagramIcon, CartIcon } from './icons'
 import { Highlight } from '@/app/product/[id]/DescriptionCard'
 import { SITE } from './config'
 import type { Product } from './types'
@@ -37,6 +37,8 @@ const FEATURES = [
 ]
 
 type SortValue = typeof SORT_OPTIONS[number]['value']
+
+type CartItem = { key: string; product: Product; qty: number; color?: string }
 
 function categoryNameOf(p: Product): string {
   const cat = (p.category || '').toLowerCase()
@@ -70,6 +72,122 @@ export default function CatalogView({
   const [sortBy, setSortBy] = useState<SortValue>(validSort)
   const [sortOpen, setSortOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    if (typeof window === 'undefined') return []
+    try {
+      const stored: CartItem[] = JSON.parse(localStorage.getItem('artigas-cart') || '[]')
+      return stored.map((item) => ({
+        ...item,
+        key: item.key || (item.color ? `${item.product._id}::${item.color}` : item.product._id),
+      }))
+    } catch {
+      return []
+    }
+  })
+  const [cartOpen, setCartOpen] = useState(false)
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('artigas-cart', JSON.stringify(cart))
+    } catch { /* ignore */ }
+  }, [cart])
+
+  const cartCount = cart.reduce((n, i) => n + i.qty, 0)
+  const cartTotal = cart.reduce((n, i) => n + i.product.price * i.qty, 0)
+  const cartItemsQty = (productId: string) =>
+    cart
+      .filter((i) => i.product._id === productId)
+      .reduce((n, i) => n + i.qty, 0)
+
+  const lineKey = (product: Product, color?: string) =>
+    color ? `${product._id}::${color}` : product._id
+
+  const addToCart = (product: Product) => {
+    if (product.stock === 0) return
+    const colors =
+      product.hasColors && product.colors && product.colors.length > 0
+        ? product.colors
+        : []
+    setCart((prev) => {
+      const stock = product.stock ?? Infinity
+      const totalQty = prev
+        .filter((i) => i.product._id === product._id)
+        .reduce((n, i) => n + i.qty, 0)
+      if (totalQty >= stock) return prev
+      const inCart = new Set(
+        prev
+          .filter((i) => i.product._id === product._id && i.color)
+          .map((i) => i.color as string)
+      )
+      const color = colors.length
+        ? colors.find((c) => !inCart.has(c)) ?? colors[0]
+        : undefined
+      const key = lineKey(product, color)
+      const existing = prev.find((i) => i.key === key)
+      if (existing) {
+        return prev.map((i) => (i.key === key ? { ...i, qty: i.qty + 1 } : i))
+      }
+      return [...prev, { key, product, qty: 1, color }]
+    })
+  }
+
+  const updateQty = (key: string, delta: number) => {
+    if (delta > 0) {
+      setCart((prev) => {
+        const item = prev.find((i) => i.key === key)
+        if (!item) return prev
+        const stock = item.product.stock ?? Infinity
+        const totalQty = prev
+          .filter((i) => i.product._id === item.product._id)
+          .reduce((n, i) => n + i.qty, 0)
+        if (totalQty >= stock) return prev
+        return prev.map((i) => (i.key === key ? { ...i, qty: i.qty + delta } : i))
+      })
+      return
+    }
+    setCart((prev) =>
+      prev
+        .map((i) => (i.key === key ? { ...i, qty: i.qty + delta } : i))
+        .filter((i) => i.qty > 0)
+    )
+  }
+
+  const removeItem = (key: string) =>
+    setCart((prev) => prev.filter((i) => i.key !== key))
+
+  const setItemColor = (key: string, color: string) =>
+    setCart((prev) => {
+      const current = prev.find((i) => i.key === key)
+      if (!current) return prev
+      const product = current.product
+      const stock = product.stock ?? Infinity
+      const targetKey = lineKey(product, color)
+      const target = prev.find((i) => i.key === targetKey)
+      if (target) {
+        const totalQty = prev
+          .filter((i) => i.product._id === product._id)
+          .reduce((n, i) => n + i.qty, 0)
+        const space = Math.max(0, stock - (totalQty - current.qty))
+        const add = Math.min(current.qty, space)
+        return prev
+          .filter((i) => i.key !== key)
+          .map((i) => (i.key === targetKey ? { ...i, qty: i.qty + add, color } : i))
+      }
+      return prev.map((i) =>
+        i.key === key ? { ...i, color, key: targetKey } : i
+      )
+    })
+
+  const sendOrder = () => {
+    const lines = cart
+      .map((i) => {
+        const colorSuffix = i.color ? ` (${i.color})` : ''
+        return `- ${i.qty}x ${(i.product.shortName || i.product.name).trim()}${colorSuffix} — $${i.product.price * i.qty}`
+      })
+      .join('\n')
+    const msg = `Hola! Hago este pedido:\n\n${lines}\n\nTOTAL: $${cartTotal} UY`
+    window.open(`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank')
+  }
 
   const sortLabel = SORT_OPTIONS.find(o => o.value === sortBy)?.label ?? SORT_OPTIONS[0].label
 
@@ -223,17 +341,30 @@ export default function CatalogView({
                 <span className="text-sm font-bold text-neutral-500 line-through">${product.oldPrice}</span>
               )}
             </div>
-            <a
-              href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Hola! Me interesa "${(product.shortName || product.name).trim()}" a $${product.price} UY`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              aria-label={`Consultar ${product.shortName || product.name} por WhatsApp`}
-              className="mt-3 w-full inline-flex items-center justify-center gap-2 bg-white text-black hover:bg-neutral-300 font-bold py-2.5 px-4 rounded-xl transition-all duration-300 uppercase tracking-wider text-[11px] cursor-pointer active:scale-95"
-            >
-              <WhatsAppIcon className="w-4 h-4" />
-              Consultar
-            </a>
+            <div className="mt-3 flex gap-2">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  addToCart(product)
+                }}
+                disabled={product.stock === 0}
+                aria-label={`Agregar ${product.shortName || product.name} al carrito`}
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-white text-black hover:bg-neutral-300 font-bold py-2.5 px-4 rounded-xl transition-all duration-300 uppercase tracking-wider text-[11px] cursor-pointer active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white"
+              >
+                <CartIcon className="w-4 h-4" />
+                {product.stock === 0 ? 'Agotado' : 'Agregar'}
+              </button>
+              <a
+                href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Hola! Me interesa "${(product.shortName || product.name).trim()}" a $${product.price} UY`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                aria-label={`Consultar ${product.shortName || product.name} por WhatsApp`}
+                className="inline-flex items-center justify-center bg-neutral-800 text-white hover:bg-neutral-700 border border-neutral-700 font-bold w-11 py-2.5 rounded-xl transition-all duration-300 cursor-pointer active:scale-95"
+              >
+                <WhatsAppIcon className="w-4 h-4" />
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -252,12 +383,12 @@ export default function CatalogView({
           <div className="max-w-7xl mx-auto px-4 md:px-6">
             <div className="h-16 md:h-20 flex items-center justify-between gap-4 relative">
 
-              <Link href="/" className="flex items-center gap-3 group shrink-0">
+              <Link href="/" className="flex items-center gap-3 group shrink-0 animate-float-soft">
                 <span className="h-9 w-9 md:h-11 md:w-11 rounded-lg bg-white flex items-center justify-center overflow-hidden shrink-0 ring-1 ring-black/20">
                   <Image src="/logo.jpg" alt="Artigas Shop" width={44} height={44} className="object-contain w-full h-full" priority />
                 </span>
                 <span className="hidden sm:block text-lg md:text-xl font-black tracking-tight text-white">
-                  ARTIGAS<span className="text-neutral-600">SHOP</span>
+                  ARTIGAS<span className="text-neutral-600 text-[0.88em] ml-1.5">SHOP</span>
                 </span>
               </Link>
 
@@ -294,11 +425,7 @@ export default function CatalogView({
           SHOP
         </div>
         <div className="max-w-7xl mx-auto px-6 pt-16 md:pt-24 pb-14 md:pb-20 relative z-10">
-          <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-neutral-400 border border-neutral-800 px-4 py-2 rounded-full">
-            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-            Tienda en Artigas, Uruguay
-          </span>
-          <h1 className="mt-6 text-4xl sm:text-5xl md:text-7xl font-black tracking-tight leading-[1.05]">
+          <h1 className="mt-6 text-4xl sm:text-5xl md:text-7xl font-black tracking-tight leading-[1.05] animate-float">
             TU TIENDA DE
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-500">CONFIANZA</span>
@@ -366,7 +493,7 @@ export default function CatalogView({
           <div className="flex items-end justify-between mb-8 md:mb-10">
             <div>
               <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-neutral-500">Categorías</span>
-              <h2 className="mt-2 text-2xl md:text-4xl font-black tracking-tight">EXPLORÁ LA TIENDA</h2>
+              <h2 className="mt-2 text-2xl md:text-4xl font-black tracking-tight animate-float">EXPLORÁ LA TIENDA</h2>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -418,7 +545,7 @@ export default function CatalogView({
           <div className="flex items-end justify-between mb-8 md:mb-10 relative z-10">
             <div>
               <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-neutral-500">Destacados</span>
-              <h2 className="mt-2 text-2xl md:text-4xl font-black tracking-tight">LO MÁS PEDIDO</h2>
+              <h2 className="mt-2 text-2xl md:text-4xl font-black tracking-tight animate-float">LO MÁS PEDIDO</h2>
             </div>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
@@ -597,6 +724,87 @@ export default function CatalogView({
           </div>
         </div>
       </section>
+
+      {cartCount > 0 && (
+        <div className="fixed bottom-4 left-4 z-50 w-[calc(100%-5rem)] max-w-[400px]">
+          {cartOpen && (
+            <div className="mb-3 bg-neutral-950 border border-neutral-800 rounded-2xl shadow-2xl shadow-black overflow-hidden animate-dropdown-in">
+              <div className="p-4 border-b border-neutral-800 flex items-center justify-between">
+                <span className="font-black text-sm uppercase tracking-wider">Tu pedido</span>
+                <button onClick={() => setCart([])} className="text-xs font-bold text-neutral-500 hover:text-white cursor-pointer">
+                  Vaciar
+                </button>
+              </div>
+              <div className="max-h-64 overflow-y-auto divide-y divide-neutral-900">
+                {cart.map((i) => (
+                  <div key={i.key} className="flex items-center gap-3 p-3">
+                    {i.product.image ? (
+                      <Image
+                        src={urlFor(i.product.image).width(80).auto('format').url()}
+                        alt={i.product.name}
+                        width={40}
+                        height={40}
+                        className="rounded-lg object-cover w-10 h-10 bg-neutral-900"
+                      />
+                    ) : (
+                      <span className="w-10 h-10 rounded-lg bg-neutral-900 flex items-center justify-center text-[8px] text-neutral-600">img</span>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold truncate">{i.product.shortName || i.product.name}</p>
+                      <p className="text-xs text-neutral-500">${i.product.price} c/u</p>
+                      {i.product.hasColors && i.product.colors && i.product.colors.length > 0 && (
+                        <select
+                          value={i.color || i.product.colors[0]}
+                          onChange={(e) => setItemColor(i.key, e.target.value)}
+                          className="mt-1 w-full bg-neutral-900 border border-neutral-700 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-white cursor-pointer"
+                          aria-label={`Color de ${i.product.shortName || i.product.name}`}
+                        >
+                          {i.product.colors.map((c) => (
+                            <option key={c} value={c} className="bg-black">{c}</option>
+                          ))}
+                        </select>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button onClick={() => updateQty(i.key, -1)} className="w-6 h-6 rounded border border-neutral-700 text-neutral-300 hover:border-white cursor-pointer">−</button>
+                      <span className="w-5 text-center text-sm font-bold">{i.qty}</span>
+                      <button
+                        onClick={() => updateQty(i.key, 1)}
+                        disabled={i.product.stock !== undefined && i.product.stock <= cartItemsQty(i.product._id)}
+                        className="w-6 h-6 rounded border border-neutral-700 text-neutral-300 hover:border-white disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                      >+</button>
+                    </div>
+                    <button onClick={() => removeItem(i.key)} className="text-neutral-600 hover:text-white text-lg leading-none cursor-pointer" aria-label="Quitar">×</button>
+                  </div>
+                ))}
+              </div>
+              <div className="p-4 border-t border-neutral-800">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">Total</span>
+                  <span className="text-xl font-black">${cartTotal}</span>
+                </div>
+                <button
+                  onClick={sendOrder}
+                  className="w-full inline-flex items-center justify-center gap-2 bg-white text-black hover:bg-neutral-200 font-black py-3 rounded-xl uppercase tracking-wider text-xs cursor-pointer active:scale-95"
+                >
+                  <WhatsAppIcon className="w-4 h-4" />
+                  Enviar pedido por WhatsApp
+                </button>
+              </div>
+            </div>
+          )}
+          <button
+            onClick={() => setCartOpen(!cartOpen)}
+            className="w-full flex items-center justify-between gap-3 bg-white text-black rounded-2xl px-5 py-3.5 shadow-[0_8px_30px_rgba(0,0,0,0.8)] hover:bg-neutral-200 transition-colors cursor-pointer"
+          >
+            <span className="flex items-center gap-2 font-black uppercase tracking-wider text-xs">
+              <CartIcon className="w-5 h-5" />
+              {cartCount} {cartCount === 1 ? 'producto' : 'productos'}
+            </span>
+            <span className="font-black">${cartTotal}</span>
+          </button>
+        </div>
+      )}
 
       <a
         href={SITE.instagram}
