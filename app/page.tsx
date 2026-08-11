@@ -8,7 +8,6 @@ export const dynamic = 'force-dynamic'
 type SearchParams = {
   categoria?: string
   q?: string
-  filtro?: string
   orden?: string
 }
 
@@ -23,6 +22,7 @@ async function getProducts(): Promise<Product[]> {
     shortDescription,
     category,
     stock,
+    featured,
     image,
     "mainImage": images[0]
   }`
@@ -44,7 +44,6 @@ export default async function Home({
       initialProducts={products || []}
       initialCategory={params.categoria}
       initialQuery={params.q}
-      initialFilter={params.filtro}
       initialSort={params.orden}
     />
   )

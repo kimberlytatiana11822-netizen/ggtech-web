@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050507;
-  --foreground: #ededed;
+  --background: #000000;
+  --foreground: #fafafa;
 }
 
 @theme inline {
@@ -10,9 +10,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --animate-orbit: orbit 18s linear infinite;
-  --animate-float: float 7s ease-in-out infinite;
-  --animate-shine: shine 3.5s ease-in-out infinite;
+  --animate-marquee: marquee 30s linear infinite;
 }
 
 body {
@@ -32,8 +30,8 @@ textarea {
 }
 
 ::selection {
-  background: #0ea5e9;
-  color: #fff;
+  background: #ffffff;
+  color: #000000;
 }
 
 /* Scrollbar */
@@ -42,12 +40,15 @@ textarea {
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #0c0a09;
+  background: #000000;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #0ea5e9, #6366f1);
+  background: #262626;
   border-radius: 999px;
-  border: 2px solid #0c0a09;
+  border: 2px solid #000000;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #404040;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -84,50 +85,6 @@ textarea {
 }
 .animate-fade-up {
   animation: fade-up 0.3s ease-out backwards;
-}
-
-@keyframes orbit {
-  from {
-    transform: translate(0, 0);
-  }
-  33% {
-    transform: translate(30px, -45px);
-  }
-  66% {
-    transform: translate(-40px, 25px);
-  }
-  to {
-    transform: translate(0, 0);
-  }
-}
-.animate-orbit {
-  animation: var(--animate-orbit);
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-14px);
-  }
-}
-.animate-float {
-  animation: var(--animate-float);
-}
-
-@keyframes shine {
-  0%,
-  100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-.animate-shine {
-  animation: var(--animate-shine);
 }
 
 @keyframes marquee {

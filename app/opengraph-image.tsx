@@ -15,8 +15,8 @@ export default function OpengraphImage() {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#0c0a09',
-          color: '#fafaf9',
+          background: '#000000',
+          color: '#fafafa',
           position: 'relative',
         }}
       >
@@ -25,7 +25,7 @@ export default function OpengraphImage() {
             position: 'absolute',
             inset: 0,
             background:
-              'radial-gradient(600px circle at 20% 10%, rgba(56,189,248,0.35), transparent 60%), radial-gradient(600px circle at 90% 90%, rgba(255,255,255,0.12), transparent 60%)',
+              'radial-gradient(600px circle at 20% 10%, rgba(255,255,255,0.15), transparent 60%), radial-gradient(600px circle at 90% 90%, rgba(255,255,255,0.06), transparent 60%)',
           }}
         />
         <div
@@ -36,12 +36,12 @@ export default function OpengraphImage() {
             display: 'flex',
           }}
         >
-          Artigas<span style={{ color: '#f97316' }}> Shop</span>
+          ARTIGAS<span style={{ color: '#a3a3a3' }}>SHOP</span>
         </div>
         <div
           style={{
             fontSize: 32,
-            color: '#a8a29e',
+            color: '#a3a3a3',
             marginTop: 16,
             display: 'flex',
           }}

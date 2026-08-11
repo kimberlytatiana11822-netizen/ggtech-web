@@ -1,26 +1,37 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { SITE } from './config'
 import { WhatsAppIcon, InstagramIcon } from './icons'
 
 export default function Footer() {
   return (
-    <footer className="bg-stone-950 border-t border-stone-800/80 relative overflow-hidden">
-      <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 bg-sky-600/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="max-w-7xl mx-auto px-6 py-12 relative">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-black border-t border-neutral-900 relative overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="absolute -bottom-10 right-0 select-none pointer-events-none text-[180px] md:text-[280px] font-black leading-none text-neutral-950 tracking-tight"
+      >
+        SHOP
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 pt-16 pb-10 relative">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="md:col-span-2">
-            <Link href="/" className="text-2xl font-black tracking-tight text-stone-100">
-              Artigas<span className="text-orange-500"> Shop</span>
+            <Link href="/" className="flex items-center gap-3 text-xl font-black tracking-tight text-white">
+              <span className="h-10 w-10 rounded-lg bg-white flex items-center justify-center overflow-hidden shrink-0 ring-1 ring-black/20">
+                <Image src="/logo.jpg" alt="Artigas Shop" width={40} height={40} className="object-contain w-full h-full" />
+              </span>
+              ARTIGAS<span className="text-neutral-600">SHOP</span>
             </Link>
-            <p className="text-stone-400 text-sm mt-3 leading-relaxed max-w-md">
-              Tu tienda de confianza en Artigas. Productos seleccionados con los mejores precios.
+            <p className="text-neutral-400 text-sm mt-4 leading-relaxed max-w-md">
+              Tu tienda de confianza en Artigas, Uruguay. Tecnología, cocina, belleza y más
+              con los mejores precios y envío a domicilio.
             </p>
-            <div className="flex flex-wrap gap-3 mt-5">
+            <div className="flex flex-wrap gap-3 mt-6">
               <a
                 href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent('Hola! Quiero consultar por un producto de Artigas Shop')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-black py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer"
+                className="inline-flex items-center gap-2 bg-white text-black hover:bg-neutral-300 font-bold py-2.5 px-5 rounded-full text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer"
               >
                 <WhatsAppIcon className="w-4 h-4" />
                 WhatsApp
@@ -29,7 +40,7 @@ export default function Footer() {
                 href={SITE.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-gradient-to-tr from-fuchsia-600 via-rose-500 to-amber-400 hover:brightness-110 text-white font-black py-2.5 px-5 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer"
+                className="inline-flex items-center gap-2 bg-transparent text-white border border-neutral-700 hover:border-white font-bold py-2.5 px-5 rounded-full text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer"
               >
                 <InstagramIcon className="w-4 h-4" />
                 Instagram
@@ -38,16 +49,17 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-stone-100 font-bold text-xs uppercase tracking-widest mb-4">Enlaces</h3>
-            <ul className="space-y-2">
-              <li><Link href="/" className="text-stone-400 hover:text-orange-400 text-sm transition-colors">Inicio</Link></li>
-              <li><Link href="/" className="text-stone-400 hover:text-orange-400 text-sm transition-colors">Catálogo</Link></li>
+            <h3 className="text-white font-bold text-xs uppercase tracking-widest mb-5">Enlaces</h3>
+            <ul className="space-y-3">
+              <li><Link href="/" className="text-neutral-400 hover:text-white text-sm transition-colors">Inicio</Link></li>
+              <li><Link href="/#catalogo" className="text-neutral-400 hover:text-white text-sm transition-colors">Catálogo</Link></li>
+              <li><Link href="/" className="text-neutral-400 hover:text-white text-sm transition-colors">Ofertas</Link></li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-stone-100 font-bold text-xs uppercase tracking-widest mb-4">Contacto</h3>
-            <ul className="space-y-2 text-stone-400 text-sm">
+            <h3 className="text-white font-bold text-xs uppercase tracking-widest mb-5">Contacto</h3>
+            <ul className="space-y-3 text-neutral-400 text-sm">
               <li>{SITE.location}</li>
               <li>{SITE.email}</li>
               <li>
@@ -55,7 +67,7 @@ export default function Footer() {
                   href={`https://wa.me/${SITE.whatsapp}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-orange-400 transition-colors"
+                  className="hover:text-white transition-colors"
                 >
                   WhatsApp: {SITE.whatsapp}
                 </a>
@@ -64,8 +76,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-stone-800/60 mt-8 pt-8 text-center text-stone-500 text-xs">
-          &copy; {new Date().getFullYear()} Artigas Shop. Todos los derechos reservados.
+        <div className="border-t border-neutral-900 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-neutral-500 text-xs">
+          <span>&copy; {new Date().getFullYear()} Artigas Shop. Todos los derechos reservados.</span>
+          <span className="uppercase tracking-widest">Hecho con ♥ en Artigas, Uruguay</span>
         </div>
       </div>
     </footer>

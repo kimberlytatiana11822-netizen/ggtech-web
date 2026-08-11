@@ -102,7 +102,7 @@ export default function ProductActions({
   }
 
   return (
-    <div className="mt-10 pt-6 border-t border-stone-800 flex flex-col gap-3">
+    <div className="mt-10 pt-6 border-t border-neutral-800 flex flex-col gap-3">
       {canPickColor && (
         <div className="relative" ref={colorRef}>
           <button
@@ -112,7 +112,7 @@ export default function ProductActions({
             }}
             aria-expanded={colorOpen}
             aria-haspopup="listbox"
-            className="w-full flex items-center justify-between bg-stone-900/80 border border-stone-700 rounded-xl px-4 py-3 text-sm text-stone-100 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/20 transition-all cursor-pointer"
+            className="w-full flex items-center justify-between bg-neutral-900/80 border border-neutral-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-white focus:ring-1 focus:ring-white/20 transition-all cursor-pointer"
           >
             <span className="flex items-center gap-2">
               {selectedColors.length > 0 ? (
@@ -120,13 +120,13 @@ export default function ProductActions({
                   {selectedColors.slice(0, 3).map((c) => (
                     <span
                       key={c}
-                      className="w-3.5 h-3.5 rounded-full border border-stone-600 shrink-0"
+                      className="w-3.5 h-3.5 rounded-full border border-neutral-600 shrink-0"
                       style={{ background: COLOR_SWATCHES[c] ?? '#a8a29e' }}
                     />
                   ))}
                 </span>
               ) : (
-                <span className="w-3.5 h-3.5 rounded-full border border-dashed border-stone-500 shrink-0" />
+                <span className="w-3.5 h-3.5 rounded-full border border-dashed border-neutral-500 shrink-0" />
               )}
               <span className="font-bold uppercase tracking-wider text-xs">
                 {selectedColors.length === 0
@@ -137,7 +137,7 @@ export default function ProductActions({
               </span>
             </span>
             <svg
-              className={`w-3 h-3 text-stone-400 transition-transform duration-300 ${colorOpen ? 'rotate-180' : ''}`}
+              className={`w-3 h-3 text-neutral-400 transition-transform duration-300 ${colorOpen ? 'rotate-180' : ''}`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -150,7 +150,7 @@ export default function ProductActions({
           {colorOpen && (
             <div
               role="listbox"
-              className="absolute top-full left-0 right-0 mt-2 bg-stone-900 border border-stone-700 rounded-xl shadow-2xl shadow-black/50 overflow-hidden z-50 animate-dropdown-in"
+              className="absolute top-full left-0 right-0 mt-2 bg-neutral-950 border border-neutral-800 rounded-xl shadow-2xl shadow-black overflow-hidden z-50 animate-dropdown-in"
             >
               {colors?.map((c) => {
                 const isSelected = selectedColors.includes(c)
@@ -165,12 +165,12 @@ export default function ProductActions({
                     }}
                     className={`w-full flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${
                       isSelected
-                        ? 'bg-orange-600/20 text-orange-400'
-                        : 'text-stone-300 hover:bg-stone-800 hover:text-stone-100'
+                        ? 'bg-white/10 text-white'
+                        : 'text-neutral-300 hover:bg-neutral-900 hover:text-white'
                     }`}
                   >
                     <span
-                      className="w-3.5 h-3.5 rounded-full border border-stone-600 shrink-0"
+                      className="w-3.5 h-3.5 rounded-full border border-neutral-600 shrink-0"
                       style={{ background: COLOR_SWATCHES[c] ?? '#a8a29e' }}
                     />
                     {c}
@@ -184,14 +184,14 @@ export default function ProductActions({
       )}
 
       {colorWarning && (
-        <p className="text-xs text-red-400 font-bold">Elegí al menos un color para consultar</p>
+        <p className="text-xs text-white font-bold">Elegí al menos un color para consultar</p>
       )}
 
       {hasStock && canPickColor && selectedColors.length > 0 && (
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between px-1">
-            <span className="text-xs font-bold uppercase tracking-wider text-stone-400">Cantidad por color</span>
-            <span className="text-xs font-bold text-stone-500">
+            <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">Cantidad por color</span>
+            <span className="text-xs font-bold text-neutral-500">
               Total: {totalUnits}
               {atMaxStock ? ` · máx ${maxQty}` : ''}
             </span>
@@ -201,30 +201,30 @@ export default function ProductActions({
             return (
               <div
                 key={c}
-                className="flex items-center justify-between gap-3 bg-stone-900/80 border border-stone-700 rounded-xl px-4 py-3"
+                className="flex items-center justify-between gap-3 bg-neutral-900/80 border border-neutral-700 rounded-xl px-4 py-3"
               >
                 <span className="flex items-center gap-2 min-w-0">
                   <span
-                    className="w-3.5 h-3.5 rounded-full border border-stone-600 shrink-0"
+                    className="w-3.5 h-3.5 rounded-full border border-neutral-600 shrink-0"
                     style={{ background: COLOR_SWATCHES[c] ?? '#a8a29e' }}
                   />
-                  <span className="text-sm font-bold text-stone-100 truncate">{c}</span>
+                  <span className="text-sm font-bold text-white truncate">{c}</span>
                 </span>
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => onColorQtyChange(c, Math.max(1, q - 1))}
                     disabled={q <= 1}
                     aria-label={`Disminuir cantidad de ${c}`}
-                    className="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-100 font-black text-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    className="w-8 h-8 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white font-black text-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                   >
                     −
                   </button>
-                  <span className="w-8 text-center text-lg font-black text-stone-100">{q}</span>
+                  <span className="w-8 text-center text-lg font-black text-white">{q}</span>
                   <button
                     onClick={() => onColorQtyChange(c, Math.min(maxQty, q + 1))}
                     disabled={atMaxStock}
                     aria-label={`Aumentar cantidad de ${c}`}
-                    className="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-100 font-black text-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    className="w-8 h-8 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white font-black text-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                   >
                     +
                   </button>
@@ -236,23 +236,23 @@ export default function ProductActions({
       )}
 
       {hasStock && !canPickColor && (
-        <div className="flex items-center justify-between gap-3 bg-stone-900/80 border border-stone-700 rounded-xl px-4 py-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-stone-400">Cantidad</span>
+        <div className="flex items-center justify-between gap-3 bg-neutral-900/80 border border-neutral-700 rounded-xl px-4 py-3">
+          <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">Cantidad</span>
           <div className="flex items-center gap-3">
             <button
               onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
               disabled={quantity <= 1}
               aria-label="Disminuir cantidad"
-              className="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-100 font-black text-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              className="w-8 h-8 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white font-black text-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
             >
               −
             </button>
-            <span className="w-8 text-center text-lg font-black text-stone-100">{quantity}</span>
+            <span className="w-8 text-center text-lg font-black text-white">{quantity}</span>
             <button
               onClick={() => onQuantityChange(Math.min(maxQty, quantity + 1))}
               disabled={quantity >= maxQty}
               aria-label="Aumentar cantidad"
-              className="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-100 font-black text-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              className="w-8 h-8 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white font-black text-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
             >
               +
             </button>
@@ -263,23 +263,23 @@ export default function ProductActions({
       <div className="flex items-center gap-3">
         <button
           onClick={handleWhatsApp}
-          className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white font-black py-4 px-6 rounded-xl transition-all duration-300 uppercase tracking-wider text-xs cursor-pointer"
+          className="flex-1 flex items-center justify-center gap-2 bg-white text-black hover:bg-neutral-300 font-black py-4 px-6 rounded-xl transition-all duration-300 uppercase tracking-wider text-xs cursor-pointer"
         >
           <WhatsAppIcon className="w-5 h-5" />
           Consultar por WhatsApp
         </button>
         <button
           onClick={handleShare}
-          className="flex items-center justify-center gap-2 bg-stone-800 hover:bg-stone-700 text-stone-100 font-black py-4 px-4 rounded-xl transition-all duration-300 text-xs cursor-pointer"
+          className="flex items-center justify-center gap-2 bg-neutral-800 hover:bg-neutral-700 text-white font-black py-4 px-4 rounded-xl transition-all duration-300 text-xs cursor-pointer"
         >
           {copied ? '✓' : <ShareIcon className="w-5 h-5" />}
         </button>
       </div>
       <div className="flex items-center gap-2">
         <span className={`inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full ${
-          stock && stock > 0 ? 'bg-green-500/15 text-green-400 border border-green-500/30' : 'bg-red-500/15 text-red-400 border border-red-500/30'
+          stock && stock > 0 ? 'bg-white/10 text-white border border-white/30' : 'bg-neutral-800 text-neutral-400 border border-neutral-700'
         }`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${stock && stock > 0 ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
+          <span className={`w-1.5 h-1.5 rounded-full ${stock && stock > 0 ? 'bg-white animate-pulse' : 'bg-neutral-500'}`} />
           {stock && stock > 0 ? `Disponible · Quedan ${stock}` : 'Sin stock'}
         </span>
       </div>

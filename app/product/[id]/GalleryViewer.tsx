@@ -109,7 +109,7 @@ export default function GalleryViewer({ images, productName }: { images: string[
   const prevButton = images.length > 1 ? (
     <button
       onClick={(e) => { e.stopPropagation(); goToPrev() }}
-      className="hidden md:flex shrink-0 bg-stone-900/80 backdrop-blur-md text-white w-11 h-11 rounded-full font-bold items-center justify-center hover:bg-orange-500 hover:text-stone-950 transition-colors cursor-pointer shadow-md text-xl"
+      className="hidden md:flex shrink-0 bg-neutral-900/80 backdrop-blur-md text-white w-11 h-11 rounded-full font-bold items-center justify-center hover:bg-white hover:text-black transition-colors cursor-pointer shadow-md text-xl"
       aria-label="Imagen anterior"
     >
       ‹
@@ -119,7 +119,7 @@ export default function GalleryViewer({ images, productName }: { images: string[
   const nextButton = images.length > 1 ? (
     <button
       onClick={(e) => { e.stopPropagation(); goToNext() }}
-      className="hidden md:flex shrink-0 bg-stone-900/80 backdrop-blur-md text-white w-11 h-11 rounded-full font-bold items-center justify-center hover:bg-orange-500 hover:text-stone-950 transition-colors cursor-pointer shadow-md text-xl"
+      className="hidden md:flex shrink-0 bg-neutral-900/80 backdrop-blur-md text-white w-11 h-11 rounded-full font-bold items-center justify-center hover:bg-white hover:text-black transition-colors cursor-pointer shadow-md text-xl"
       aria-label="Imagen siguiente"
     >
       ›
@@ -136,7 +136,7 @@ export default function GalleryViewer({ images, productName }: { images: string[
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       className={`fixed inset-0 z-50 flex items-center justify-center gap-3 p-4 overflow-y-auto cursor-zoom-out transition-opacity duration-300 ${
-        animateIn ? 'opacity-100 bg-stone-950/90 backdrop-blur-md' : 'opacity-0 bg-stone-950/0 backdrop-blur-none'
+        animateIn ? 'opacity-100 bg-black/90 backdrop-blur-md' : 'opacity-0 bg-black/0 backdrop-blur-none'
       }`}
     >
       {prevButton}
@@ -148,7 +148,7 @@ export default function GalleryViewer({ images, productName }: { images: string[
       >
         <button
           onClick={closeModal}
-          className="absolute top-3 right-3 bg-stone-900/80 backdrop-blur-md text-white w-8 h-8 rounded-full font-bold flex items-center justify-center hover:bg-orange-500 hover:text-stone-950 transition-colors z-10 cursor-pointer shadow-md"
+          className="absolute top-3 right-3 bg-neutral-900/80 backdrop-blur-md text-white w-8 h-8 rounded-full font-bold flex items-center justify-center hover:bg-white hover:text-black transition-colors z-10 cursor-pointer shadow-md"
           aria-label="Cerrar imagen ampliada"
         >
           ✕
@@ -175,7 +175,7 @@ export default function GalleryViewer({ images, productName }: { images: string[
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        className="w-full rounded-2xl relative overflow-hidden shadow-2xl cursor-zoom-in group bg-stone-900"
+        className="w-full rounded-2xl relative overflow-hidden shadow-2xl cursor-zoom-in group bg-neutral-900"
       >
         <Image
           src={activeImage}
@@ -185,7 +185,7 @@ export default function GalleryViewer({ images, productName }: { images: string[
           priority
           className="w-full h-auto max-h-[440px] md:max-h-none object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute bottom-3 right-3 bg-stone-900/80 backdrop-blur-md text-stone-100 text-[10px] font-bold px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+        <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
           <span>Click para ampliar</span>
           <SearchIcon className="w-3 h-3" />
         </div>
@@ -201,8 +201,8 @@ export default function GalleryViewer({ images, productName }: { images: string[
                 onClick={() => setActiveIndex(index)}
                 className={`relative flex-1 min-w-0 aspect-square max-w-20 md:max-w-24 bg-neutral-900 rounded-xl overflow-hidden cursor-pointer transition-all duration-200 border-2 ${
                   isActive
-                    ? 'border-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.5)] opacity-100'
-                    : 'border-stone-700 opacity-60 hover:opacity-100 hover:border-stone-500'
+                    ? 'border-white shadow-[0_0_20px_rgba(255,255,255,0.25)] opacity-100'
+                    : 'border-neutral-700 opacity-60 hover:opacity-100 hover:border-neutral-400'
                 }`}
                 aria-label={`Ver imagen ${index + 1}`}
                 aria-current={isActive}

@@ -15,4 +15,5 @@ export interface Product {
   image: SanityImageSource
   mainImage?: SanityImageSource
   images?: SanityImageSource[]
+  featured?: boolean
 }

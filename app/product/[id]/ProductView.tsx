@@ -48,11 +48,11 @@ export default function ProductView({
 
   const titleBlock = (
     <div>
-      <span className="text-[10px] font-black text-white uppercase tracking-widest bg-red-700 shadow-[0_0_15px_rgba(185,28,28,0.9)] px-3.5 py-1.5 rounded-full inline-block">
+      <span className="text-[10px] font-black text-black uppercase tracking-widest bg-white px-3.5 py-1.5 rounded-full inline-block">
         {product.category || 'General'}
       </span>
 
-      <h1 className="text-3xl md:text-4xl font-black text-stone-100 tracking-tight mt-5">
+      <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight mt-5">
         {product.name}
       </h1>
     </div>
@@ -60,15 +60,15 @@ export default function ProductView({
 
   const priceBlock = (
     <div className="flex items-baseline gap-2">
-      <span className="text-4xl font-black text-stone-100 tracking-tight">${total}</span>
+      <span className="text-4xl font-black text-white tracking-tight">${total}</span>
       {product.oldPrice && product.oldPrice > product.price && (
-        <span className="text-lg font-bold text-stone-500 line-through tracking-tight">
+        <span className="text-lg font-bold text-neutral-500 line-through tracking-tight">
           ${product.oldPrice * totalUnits}
         </span>
       )}
-      <span className="text-xs font-bold text-stone-500 uppercase tracking-widest">UY</span>
+      <span className="text-xs font-bold text-neutral-500 uppercase tracking-widest">UY</span>
       {totalUnits > 1 && (
-        <span className="text-sm font-bold text-stone-500">({totalUnits} × ${product.price})</span>
+        <span className="text-sm font-bold text-neutral-500">({totalUnits} × ${product.price})</span>
       )}
     </div>
   )
@@ -78,13 +78,13 @@ export default function ProductView({
       {trustBadges.map((item) => (
         <div
           key={item.label}
-          className="flex flex-col items-center text-center gap-1 bg-stone-800/50 border border-stone-800 rounded-2xl py-4 px-2 hover:border-orange-500/30 transition-colors"
+          className="flex flex-col items-center text-center gap-1 bg-neutral-800/50 border border-neutral-800 rounded-2xl py-4 px-2 hover:border-white/40 transition-colors"
         >
-          <span className="text-xl text-sky-400" aria-hidden="true">
+          <span className="text-xl text-white" aria-hidden="true">
             <item.icon className="w-6 h-6" />
           </span>
-          <span className="text-[11px] font-bold text-stone-100 uppercase tracking-wider">{item.label}</span>
-          <span className="text-[10px] text-stone-400">{item.sub}</span>
+          <span className="text-[11px] font-bold text-white uppercase tracking-wider">{item.label}</span>
+          <span className="text-[10px] text-neutral-400">{item.sub}</span>
         </div>
       ))}
     </div>
@@ -108,7 +108,7 @@ export default function ProductView({
   )
 
   return (
-    <div className="bg-stone-900/90 backdrop-blur-2xl rounded-3xl border border-stone-800 p-4 md:p-12 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)]">
+    <div className="bg-neutral-900/90 backdrop-blur-2xl rounded-3xl border border-neutral-800 p-4 md:p-12 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.9)]">
       {/* Móvil: título → galería → badges → descripción → precio → acciones */}
       <div className="md:hidden flex flex-col gap-8">
         <div>{titleBlock}</div>
