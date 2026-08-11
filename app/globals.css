@@ -98,3 +98,16 @@ textarea {
 .animate-marquee {
   animation: marquee 30s linear infinite;
 }
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-30px);
+  }
+}
+.animate-drift {
+  animation: drift 14s ease-in-out infinite;
+}

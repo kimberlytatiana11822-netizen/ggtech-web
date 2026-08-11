@@ -291,7 +291,7 @@ export default function CatalogView({
       <section className="relative border-b border-neutral-900 overflow-hidden">
         <div
           aria-hidden="true"
-          className="absolute -top-10 right-0 select-none pointer-events-none text-[220px] md:text-[380px] font-black leading-none text-neutral-950 tracking-tight"
+          className="absolute -top-10 right-0 select-none pointer-events-none text-[220px] md:text-[380px] font-black leading-none text-neutral-950 tracking-tight animate-drift"
         >
           SHOP
         </div>
@@ -410,8 +410,14 @@ export default function CatalogView({
       )}
 
       {featuredProducts.length > 0 && (
-        <section className="max-w-7xl mx-auto px-6 pb-14 md:pb-20">
-          <div className="flex items-end justify-between mb-8 md:mb-10">
+        <section className="relative max-w-7xl mx-auto px-6 pb-14 md:pb-20 overflow-hidden">
+          <div
+            aria-hidden="true"
+            className="absolute -top-10 md:-top-6 right-0 select-none pointer-events-none text-[140px] md:text-[240px] font-black leading-none text-neutral-950 tracking-tight animate-drift"
+          >
+            SHOP
+          </div>
+          <div className="flex items-end justify-between mb-8 md:mb-10 relative z-10">
             <div>
               <span className="text-[10px] font-bold uppercase tracking-[0.35em] text-neutral-500">Destacados</span>
               <h2 className="mt-2 text-2xl md:text-4xl font-black tracking-tight">LO MÁS PEDIDO</h2>

@@ -1,18 +1,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { SITE } from './config'
-import { WhatsAppIcon, InstagramIcon } from './icons'
 
 export default function Footer() {
   return (
     <footer className="bg-black border-t border-neutral-900 relative overflow-hidden">
-      <div
-        aria-hidden="true"
-        className="absolute -bottom-10 right-0 select-none pointer-events-none text-[180px] md:text-[280px] font-black leading-none text-neutral-950 tracking-tight"
-      >
-        SHOP
-      </div>
-
       <div className="max-w-7xl mx-auto px-6 pt-16 pb-10 relative">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="md:col-span-2">
@@ -26,26 +18,6 @@ export default function Footer() {
               Tu tienda de confianza en Artigas, Uruguay. Tecnología, cocina, belleza y más
               con los mejores precios y envío a domicilio.
             </p>
-            <div className="flex flex-wrap gap-3 mt-6">
-              <a
-                href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent('Hola! Quiero consultar por un producto de Artigas Shop')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-white text-black hover:bg-neutral-300 font-bold py-2.5 px-5 rounded-full text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer"
-              >
-                <WhatsAppIcon className="w-4 h-4" />
-                WhatsApp
-              </a>
-              <a
-                href={SITE.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-transparent text-white border border-neutral-700 hover:border-white font-bold py-2.5 px-5 rounded-full text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer"
-              >
-                <InstagramIcon className="w-4 h-4" />
-                Instagram
-              </a>
-            </div>
           </div>
 
           <div>
@@ -69,7 +41,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors"
                 >
-                  WhatsApp: {SITE.whatsapp}
+                  WhatsApp: 098 610 733
                 </a>
               </li>
             </ul>
